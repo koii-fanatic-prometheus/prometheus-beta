@@ -12,16 +12,13 @@ def log_json(logger, level, json_obj, message=None):
         message (str, optional): Custom message to prepend to the JSON log.
 
     Raises:
-        TypeError: If json_obj is not a dictionary or logger is not a valid logger.
+        TypeError: If json_obj is not a dictionary.
         ValueError: If level is not a valid logging level.
 
     Returns:
         None
     """
     # Validate inputs
-    if not isinstance(logger, logging.Logger):
-        raise TypeError("Invalid logger. Must be a logging.Logger instance.")
-    
     if not isinstance(json_obj, dict):
         raise TypeError("json_obj must be a dictionary.")
     
@@ -30,6 +27,10 @@ def log_json(logger, level, json_obj, message=None):
                     logging.ERROR, logging.CRITICAL]
     if level not in valid_levels:
         raise ValueError(f"Invalid logging level. Must be one of {valid_levels}")
+
+    # Use hasattr to check for 'log' method instead of isinstance
+    if not hasattr(logger, 'log'):
+        raise TypeError("Invalid logger. Must have a 'log' method.")
 
     # Format JSON with proper indentation
     try:
