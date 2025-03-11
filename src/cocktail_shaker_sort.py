@@ -16,12 +16,12 @@ def cocktail_shaker_sort(arr):
         TypeError: If the input is not a list.
         TypeError: If the list contains elements that cannot be compared.
     """
-    # Create a copy of the input list to avoid modifying the original
-    arr = arr.copy()
-    
     # Validate input
     if not isinstance(arr, list):
         raise TypeError("Input must be a list")
+    
+    # Create a copy of the input list to avoid modifying the original
+    arr = list(arr)
     
     # If list is empty or has only one element, return it
     if len(arr) <= 1:
