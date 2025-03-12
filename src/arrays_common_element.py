@@ -24,12 +24,12 @@ def has_common_element(arr1, arr2):
     if not arr1 or not arr2:
         return False
     
-    # Convert first array to a set for O(1) lookup
-    arr1_set = set(arr1)
+    # Convert first array to a set for O(1) lookup, ensuring type consistency
+    arr1_set = {(type(x), x) for x in arr1}
     
-    # Check for common elements with strict type comparison
+    # Check for common elements with strict type and value comparison
     for item in arr2:
-        if item in arr1_set:
+        if (type(item), item) in arr1_set:
             return True
     
     return False
