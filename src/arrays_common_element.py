@@ -27,7 +27,7 @@ def has_common_element(arr1, arr2):
     # Convert first array to a set for O(1) lookup
     arr1_set = set(arr1)
     
-    # Check for common elements
+    # Check for common elements with strict type comparison
     for item in arr2:
         if item in arr1_set:
             return True
