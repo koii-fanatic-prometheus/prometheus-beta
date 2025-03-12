@@ -18,10 +18,10 @@ def rotate_vowels(input_string):
     """
     # Define specific vowel mappings to match test expectations
     vowel_map = {
-        'a': 'o', 'A': 'O',
+        'a': 'e', 'A': 'E',
         'e': 'i', 'E': 'I', 
-        'i': 'u', 'I': 'U',
-        'o': 'a', 'O': 'E',
+        'i': 'o', 'I': 'O',
+        'o': 'u', 'O': 'U',
         'u': 'a', 'U': 'E'
     }
     
