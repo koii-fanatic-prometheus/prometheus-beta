@@ -112,7 +112,7 @@ def build_huffman_codes(root):
         
         # Leaf node (has a character)
         if node.char is not None:
-            codes[node.char] = current_code
+            codes[node.char] = current_code or "0"
             return
         
         # Recursive traversal
@@ -170,15 +170,16 @@ def huffman_decode(encoded_data, huffman_tree):
     Raises:
         ValueError: If encoded data is empty or tree is invalid
     """
+    # Validate inputs
+    if huffman_tree is None:
+        raise ValueError("Huffman tree cannot be None")
+    
     # Special case for single character encoding
-    if not encoded_data and huffman_tree.char is not None:
+    if huffman_tree.left is None and huffman_tree.right is None:
         return huffman_tree.char
     
     if not encoded_data:
         raise ValueError("Encoded data cannot be empty")
-    
-    if not huffman_tree:
-        raise ValueError("Huffman tree cannot be None")
     
     decoded_data = []
     current_node = huffman_tree
@@ -186,6 +187,10 @@ def huffman_decode(encoded_data, huffman_tree):
     for bit in encoded_data:
         # Traverse tree based on bit
         current_node = current_node.left if bit == '0' else current_node.right
+        
+        # Ensure current_node is not None
+        if current_node is None:
+            raise ValueError("Invalid Huffman tree structure")
         
         # If leaf node is reached
         if current_node.char is not None:
