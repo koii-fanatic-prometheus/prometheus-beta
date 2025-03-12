@@ -138,6 +138,10 @@ def huffman_encode(data):
     if not data:
         raise ValueError("Input data cannot be empty")
     
+    # Special case for single character
+    if len(data) == 1:
+        return "0", HuffmanNode(data, 1)
+    
     # Build frequency dictionary
     freq_dict = build_frequency_dict(data)
     
@@ -166,6 +170,10 @@ def huffman_decode(encoded_data, huffman_tree):
     Raises:
         ValueError: If encoded data is empty or tree is invalid
     """
+    # Special case for single character encoding
+    if not encoded_data and huffman_tree.char is not None:
+        return huffman_tree.char
+    
     if not encoded_data:
         raise ValueError("Encoded data cannot be empty")
     
