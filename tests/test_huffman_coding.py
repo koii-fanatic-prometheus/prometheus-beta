@@ -81,9 +81,8 @@ def test_error_handling():
         huffman_decode("", None)
     
     # Invalid decode scenario
-    huffman_tree = HuffmanNode('a', 1)
     with pytest.raises(ValueError):
-        huffman_decode("", huffman_tree)
+        huffman_decode("1", HuffmanNode('a', 1))
 
 def test_edge_cases():
     """Test edge cases and boundary conditions."""
