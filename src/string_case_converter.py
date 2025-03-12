@@ -40,8 +40,8 @@ def to_kebab_case(text: str) -> str:
     # Replace underscores, spaces, and multiple consecutive non-alphanumeric chars with single hyphen
     text = re.sub(r'[_\s]+', '-', text)
     
-    # Remove any non-alphanumeric characters except hyphens
-    text = re.sub(r'[^a-z0-9-]', '', text.lower())
+    # Replace non-alphanumeric sequences with a hyphen
+    text = re.sub(r'[^a-z0-9]', '-', text.lower())
     
     # Remove consecutive hyphens
     text = re.sub(r'-+', '-', text)
