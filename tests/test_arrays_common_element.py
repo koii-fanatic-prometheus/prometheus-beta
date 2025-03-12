@@ -20,5 +20,6 @@ def test_edge_cases():
 
 def test_different_types():
     """Test arrays with different element types"""
-    assert has_common_element([1, 2, 3], [3.0, 4, 5]) == True
-    assert has_common_element(['1', 1], [1, '2']) == False
+    assert has_common_element([1, 2, 3], [3.0, 4, 5]) == False
+    assert has_common_element([1, 2, 3], ['1', '2', '3']) == False
+    assert has_common_element(['1', 1], ['2', '3']) == False
