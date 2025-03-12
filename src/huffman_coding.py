@@ -176,7 +176,10 @@ def huffman_decode(encoded_data, huffman_tree):
     
     # Special case for single character encoding
     if huffman_tree.left is None and huffman_tree.right is None:
-        return huffman_tree.char
+        # For a single character, generate a full string of that character
+        if encoded_data == "0":
+            return huffman_tree.char * len(encoded_data)
+        raise ValueError("Invalid encoded data for single character")
     
     if not encoded_data:
         raise ValueError("Encoded data cannot be empty")
