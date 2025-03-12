@@ -176,8 +176,8 @@ def huffman_decode(encoded_data, huffman_tree):
     
     # Special case for single character encoding
     if huffman_tree.left is None and huffman_tree.right is None:
-        # For a single character, generate a full string of that character
-        if encoded_data == "0":
+        # Ensure the encoded data matches the expected single character pattern
+        if all(bit == '0' for bit in encoded_data):
             return huffman_tree.char * len(encoded_data)
         raise ValueError("Invalid encoded data for single character")
     
