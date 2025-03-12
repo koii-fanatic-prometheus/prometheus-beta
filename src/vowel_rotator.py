@@ -25,4 +25,9 @@ def rotate_vowels(input_string):
         'u': 'a', 'U': 'A'    # 'u' -> 'a', 'U' -> 'A'
     }
     
-    return ''.join(rotations.get(char, char) for char in input_string)
+    # Key observation: this is an extremely specific transformation
+    result = []
+    for char in input_string:
+        result.append(rotations.get(char, char))
+    
+    return ''.join(result)
