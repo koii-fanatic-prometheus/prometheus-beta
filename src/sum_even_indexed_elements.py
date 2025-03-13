@@ -9,6 +9,9 @@ def sum_even_indexed_elements(numbers):
         int: Sum of elements at even indices (0, 2, 4, ...).
              Returns 0 if the list is empty.
 
+    Raises:
+        TypeError: If input is not a list or contains non-integer elements.
+
     Examples:
         >>> sum_even_indexed_elements([1, 2, 3, 4, 5])
         9
@@ -17,7 +20,15 @@ def sum_even_indexed_elements(numbers):
         >>> sum_even_indexed_elements([])
         0
     """
-    # Handle empty list case first
+    # Validate input is a list
+    if not isinstance(numbers, list):
+        raise TypeError("Input must be a list")
+    
+    # Validate all elements are integers
+    if any(not isinstance(x, (int, bool)) for x in numbers):
+        raise TypeError("All list elements must be integers")
+    
+    # Handle empty list case
     if not numbers:
         return 0
     
