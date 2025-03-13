@@ -32,6 +32,10 @@ def find_shortest_path(maze: List[List[str]], start: Tuple[int, int], end: Tuple
         maze[end[0]][end[1]] == '#'):
         return None
     
+    # Special case: start is end
+    if start == end:
+        return [start]
+    
     # Possible movement directions: up, right, down, left
     directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
     
