@@ -7,7 +7,7 @@ def test_sum_even_indexed_elements():
     assert sum_even_indexed_elements([1, 2, 3, 4, 5]) == 9, "Failed with positive integers"
     
     # Test with mixed positive and negative integers
-    assert sum_even_indexed_elements([-1, 2, -3, 4, -5]) == -4, "Failed with mixed integers"
+    assert sum_even_indexed_elements([-1, 2, -3, 4, -5]) == -9, "Failed with mixed integers"
     
     # Test with empty list
     assert sum_even_indexed_elements([]) == 0, "Failed with empty list"
