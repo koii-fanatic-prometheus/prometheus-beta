@@ -55,3 +55,15 @@ def test_multiple_lis():
         [0, 4, 6, 9, 11, 15],
         [0, 4, 6, 10, 11, 15]
     ]
+
+def test_negative_integers():
+    """Test handling of arrays with negative integers"""
+    # Negative integers in the array
+    arr = [-7, 10, 9, 2, 3, 8, 1, 4]
+    assert longest_increasing_subsequence(arr) == 4
+    assert longest_increasing_subsequence(arr, return_sequence=True) == [2, 3, 8]
+    
+    # All negative integers
+    arr_neg = [-5, -4, -3, -2, -1]
+    assert longest_increasing_subsequence(arr_neg) == 5
+    assert longest_increasing_subsequence(arr_neg, return_sequence=True) == [-5, -4, -3, -2, -1]
