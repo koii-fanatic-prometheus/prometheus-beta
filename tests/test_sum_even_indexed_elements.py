@@ -16,7 +16,7 @@ def test_sum_even_indexed_elements():
     assert sum_even_indexed_elements([42]) == 42, "Failed with single element"
     
     # Test with even number of elements
-    assert sum_even_indexed_elements([1, 10, 2, 20, 3, 30]) == 36, "Failed with even number of elements"
+    assert sum_even_indexed_elements([1, 10, 2, 20, 3, 30]) == 6, "Failed with even number of elements"
     
     # Test with all zero elements
     assert sum_even_indexed_elements([0, 1, 0, 2, 0, 3]) == 0, "Failed with zero elements"
