@@ -27,14 +27,17 @@ def find_shortest_path(maze: List[List[str]], start: Tuple[int, int], end: Tuple
     
     # Validate start and end are within maze bounds and not walls
     if (not (0 <= start[0] < rows and 0 <= start[1] < cols) or 
-        not (0 <= end[0] < rows and 0 <= end[1] < cols) or 
-        maze[start[0]][start[1]] == '#' or 
-        maze[end[0]][end[1]] == '#'):
+        not (0 <= end[0] < rows and 0 <= end[1] < cols)):
         return None
     
     # Special case: start is end
     if start == end:
-        return [start]
+        # But check if the cell is a wall or not
+        return [start] if maze[start[0]][start[1]] != '#' else None
+    
+    # Special case: start or end is a wall
+    if maze[start[0]][start[1]] == '#' or maze[end[0]][end[1]] == '#':
+        return None
     
     # Possible movement directions: up, right, down, left
     directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
