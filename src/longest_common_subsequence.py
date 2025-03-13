@@ -34,7 +34,7 @@ def longest_common_subsequence_length(str1: str, str2: str) -> int:
     # Build the dp table
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            # If characters match, increment the length
+            # If characters match exactly (case-sensitive), increment the length
             if str1[i-1] == str2[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1
             # If characters don't match, take max of previous calculations
