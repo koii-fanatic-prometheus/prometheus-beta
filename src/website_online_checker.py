@@ -26,8 +26,8 @@ def is_website_online(url: str, timeout: float = 5.0) -> bool:
         # Send a HEAD request to check if the website is online
         response = requests.head(url, timeout=timeout)
         
-        # Consider status codes in the 200-299 range as successful
-        return 200 <= response.status_code < 300
+        # Consider status codes in the 200-399 range as successful
+        return 200 <= response.status_code < 400
     
     except (requests.ConnectionError, requests.Timeout, requests.RequestException):
         # Any connection or request errors indicate the website is not online
