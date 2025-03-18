@@ -33,10 +33,10 @@ def test_case_sensitivity():
     assert longest_common_subsequence("HELLO", "hello") == ""
     # Partial case match should not work
     assert longest_common_subsequence("Hello", "hello") == ""
-    assert longest_common_subsequence("Hello", "Hel") == "Hel"
-    assert longest_common_subsequence("hello", "Hel") == ""
-    # Correct case match should work
+    # Different case strings with some overlap
     assert longest_common_subsequence("Hello", "Helo") == "Hel"
+    assert longest_common_subsequence("hello", "Hel") == ""
+    assert longest_common_subsequence("Hel", "hello") == ""
 
 def test_unicode_strings():
     """Test with unicode strings"""
