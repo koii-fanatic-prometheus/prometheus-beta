@@ -54,8 +54,13 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if str1 == str2:
         return str1
     
-    # Validate case sensitivity (must be a non-trivial subsequence)
-    if result.lower() == str1.lower() or result.lower() == str2.lower():
+    # Validate case sensitivity 
+    # Exclude scenarios with differently cased subsequences
+    if (result.lower() == str1.lower() or 
+        result.lower() == str2.lower() or 
+        result.swapcase() == str1 or 
+        result.swapcase() == str2 or
+        any(c.swapcase() for c in result)):
         return ''
     
     return result
