@@ -11,7 +11,7 @@ def find_median_sorted_arrays(nums1, nums2):
     
     Raises:
         TypeError: If input is not a list
-        ValueError: If input contains non-numeric elements
+        ValueError: If input contains non-numeric elements or if both arrays are empty
     """
     # Type checking
     if not isinstance(nums1, list) or not isinstance(nums2, list):
@@ -20,6 +20,10 @@ def find_median_sorted_arrays(nums1, nums2):
     # Check for non-numeric elements
     if any(not isinstance(x, (int, float)) for x in nums1 + nums2):
         raise ValueError("Lists must contain only numeric elements")
+    
+    # Handle both empty arrays case
+    if len(nums1) == 0 and len(nums2) == 0:
+        raise ValueError("Cannot find median of two empty arrays")
     
     # Ensure nums1 is the smaller array for efficiency
     if len(nums1) > len(nums2):
