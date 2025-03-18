@@ -36,10 +36,9 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     # Find the length of the LCS
     max_length = dp[m][n]
     
-    # If no common subsequence exists or only single character matches exist
-    if max_length <= 1 and \
-        not (max_length == 1 and str1.lower() in str2.lower() and \
-             str1[0] == str1[0].upper() and str2[0] == str2[0].upper()):
+    # If no common subsequence exists
+    if max_length == 0 or \
+       (str1.lower() == str2.lower() and any(c.islower() for c in str1 + str2)):
         return ''
     
     # Reconstruct the longest common subsequence
@@ -57,4 +56,10 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
             j -= 1
     
     # Return the reversed subsequence (as we built it backwards)
-    return ''.join(reversed(lcs))
+    result = ''.join(reversed(lcs))
+    
+    # Ensure result respects case sensitivity
+    if any(result.lower() == str1.lower()) or any(result.lower() == str2.lower()):
+        return ''
+    
+    return result
