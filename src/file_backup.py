@@ -33,11 +33,10 @@ def create_file_backup(source_path, backup_dir=None):
     # Create backup directory if it doesn't exist
     os.makedirs(backup_dir, exist_ok=True)
 
-    # Generate backup filename with timestamp
+    # Generate backup filename with timestamp 
     filename = os.path.basename(source_path)
-    name, ext = os.path.splitext(filename)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_filename = f"{name}_{timestamp}{ext}"
+    backup_filename = f"{filename}_{timestamp}"
     backup_path = os.path.join(backup_dir, backup_filename)
 
     # Copy the file
