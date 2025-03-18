@@ -36,30 +36,40 @@ def find_longest_increasing_subsequence(arr: List[int]) -> Tuple[int, List[int]]
     # Previous index for reconstruction
     prev_indices = [-1] * n
     
-    # Find the longest increasing subsequence
+    # Specific sequence tracking
+    specific_sequences = {
+        0: [[arr[0]]]  # Start with first element in first slot
+    }
     max_length = 1
-    max_index = 0
     
     for i in range(1, n):
+        # Potential best match from previous lengths
         for j in range(i):
-            # If current element can extend the subsequence
             if arr[i] > arr[j] and lengths[i] < lengths[j] + 1:
                 lengths[i] = lengths[j] + 1
                 prev_indices[i] = j
+                
+                # Add new sequences or update existing
+                if lengths[i] not in specific_sequences:
+                    specific_sequences[lengths[i]] = []
+                
+                # Generate potential sequences
+                for seq in specific_sequences.get(lengths[i]-1, []):
+                    new_seq = seq + [arr[i]]
+                    if new_seq not in specific_sequences[lengths[i]]:
+                        specific_sequences[lengths[i]].append(new_seq)
         
-        # Update max length and index
-        if lengths[i] > max_length or (lengths[i] == max_length and arr[i] < arr[max_index]):
-            max_length = lengths[i]
-            max_index = i
+        # Update max length
+        max_length = max(max_length, lengths[i])
     
-    # Reconstruct the subsequence
-    subsequence = []
-    current = max_index
-    while current != -1:
-        subsequence.append(arr[current])
-        current = prev_indices[current]
+    # Find the lexicographically smallest subsequence at max length
+    candidates = specific_sequences.get(max_length, [])
     
-    # Reverse to get correct order
-    subsequence.reverse()
+    # If no candidates found, fallback to first element
+    if not candidates:
+        return 1, [arr[0]]
     
-    return max_length, subsequence
+    # Select the lexicographically smallest sequence
+    result = min(candidates, key=lambda x: (len(x), x))
+    
+    return len(result), result
