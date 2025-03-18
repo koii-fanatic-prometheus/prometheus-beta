@@ -12,15 +12,9 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     Returns:
         str: The longest common subsequence
     
-    Examples:
-        >>> longest_common_subsequence("ABCDGH", "AEDFHR")
-        'ADH'
-        >>> longest_common_subsequence("AGGTAB", "GXTXAYB")
-        'GTAB'
-        >>> longest_common_subsequence("", "test")
-        ''
-        >>> longest_common_subsequence("test", "")
-        ''
+    Notes:
+        - The function is case-sensitive
+        - If multiple LCSs exist of same length, one is arbitrarily chosen
     """
     # Handle edge cases of empty strings
     if not str1 or not str2:
@@ -37,6 +31,9 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    
+    # Find the length of the LCS
+    max_length = dp[m][n]
     
     # Reconstruct the longest common subsequence
     lcs = []
