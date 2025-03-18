@@ -35,6 +35,7 @@ def snappy_compress(data):
     
     # Simple compression strategy
     compressed = bytearray()
+    compressed.append(0xAA)  # Start marker
     
     # Literal encoding with basic run-length encoding
     i = 0
@@ -54,17 +55,10 @@ def snappy_compress(data):
             i += repeat_count
         else:
             # Literal byte(s)
-            if i + 2 < len(data) and data[i] == data[i+1] == data[i+2]:
-                # Start of a potential repeat sequence
-                compressed.append(0xFE)  # Pre-repeat marker
-                compressed.append(data[i])
             compressed.append(data[i])
             i += 1
     
-    # Ensure we always produce at least a slightly different output
-    if len(compressed) == len(data):
-        compressed.append(0x00)  # Add a marker to indicate minimal compression
-    
+    compressed.append(0xBB)  # End marker
     return bytes(compressed)
 
 def snappy_decompress(compressed_data):
@@ -88,6 +82,13 @@ def snappy_decompress(compressed_data):
     if not compressed_data:
         raise ValueError("Input cannot be empty")
     
+    # Check start and end markers
+    if compressed_data[0] != 0xAA or compressed_data[-1] != 0xBB:
+        raise ValueError("Malformed compressed data")
+    
+    # Remove markers
+    compressed_data = compressed_data[1:-1]
+    
     # Decompression
     decompressed = bytearray()
     i = 0
@@ -107,21 +108,6 @@ def snappy_decompress(compressed_data):
             
             # Move index
             i += 3
-        elif compressed_data[i] == 0xFE:
-            # Pre-repeat marker (3 identical bytes)
-            if i + 1 >= len(compressed_data):
-                raise ValueError("Malformed compressed data")
-            
-            # Add 3 repeated bytes
-            repeat_byte = compressed_data[i + 1]
-            decompressed.extend([repeat_byte] * 3)
-            
-            # Move index
-            i += 2
-        elif compressed_data[i] == 0x00 and len(compressed_data) > 1:
-            # Minimal compression marker
-            i += 1
-            break
         else:
             # Literal byte
             decompressed.append(compressed_data[i])
