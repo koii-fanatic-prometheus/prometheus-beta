@@ -15,12 +15,12 @@ def measure_execution_time(func: Callable[..., Any]) -> Callable[..., Any]:
     Raises:
         TypeError: If the input is not a callable function.
     """
+    # Check if the input is callable before proceeding
+    if not callable(func):
+        raise TypeError("Input must be a callable function")
+    
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
-        # Validate input is a callable
-        if not callable(func):
-            raise TypeError("Input must be a callable function")
-        
         # Record start time
         start_time = time.perf_counter()
         
