@@ -18,6 +18,8 @@ def to_alternating_dot_case(string):
         'p.y.t.h.o.n'
         >>> to_alternating_dot_case("")
         ''
+        >>> to_alternating_dot_case("PytHon")
+        'P.y.t.H.o.n'
     """
     # Check input type
     if not isinstance(string, str):
@@ -27,8 +29,8 @@ def to_alternating_dot_case(string):
     if not string:
         return ""
     
-    # Convert to alternating dot case
+    # Convert to alternating dot case, preserving original case
     return '.'.join(
-        char.lower() if i % 2 else char 
+        char if i % 2 else char 
         for i, char in enumerate(string)
     )
