@@ -35,8 +35,9 @@ def create_file_backup(source_path, backup_dir=None):
 
     # Generate backup filename with timestamp
     filename = os.path.basename(source_path)
+    name, ext = os.path.splitext(filename)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_filename = f"{os.path.splitext(filename)[0]}_{timestamp}{os.path.splitext(filename)[1]}"
+    backup_filename = f"{name}_{timestamp}{ext}"
     backup_path = os.path.join(backup_dir, backup_filename)
 
     # Copy the file
