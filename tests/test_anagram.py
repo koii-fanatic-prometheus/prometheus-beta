@@ -38,4 +38,4 @@ def test_invalid_inputs():
 
 def test_unicode_characters():
     """Test anagram detection with unicode characters"""
-    assert is_anagram("üben", "beüne") == True
+    assert is_anagram("über", "rebü") == True
