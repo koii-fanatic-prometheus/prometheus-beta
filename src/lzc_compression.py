@@ -13,6 +13,9 @@ def lzc_compress(input_data):
         ValueError: If input is empty.
     """
     # Validate input
+    if input_data is None:
+        raise TypeError("Input data cannot be None")
+    
     if not input_data:
         raise ValueError("Input data cannot be empty")
     
@@ -75,6 +78,10 @@ def lzc_decompress(compressed_data):
     
     if not compressed_data:
         raise ValueError("Compressed data cannot be empty")
+    
+    # Check that all entries are integers
+    if not all(isinstance(code, int) for code in compressed_data):
+        raise TypeError("All codes must be integers")
     
     # Initialize dictionary with single-byte entries
     dictionary = {i: bytes([i]) for i in range(256)}
