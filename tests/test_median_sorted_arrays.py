@@ -31,7 +31,7 @@ def test_large_arrays():
     """Test with larger arrays"""
     nums1 = [1, 3, 5, 7, 9]
     nums2 = [2, 4, 6, 8, 10, 12, 14]
-    assert find_median_sorted_arrays(nums1, nums2) == 7
+    assert find_median_sorted_arrays(nums1, nums2) == 6.5
 
 def test_float_arrays():
     """Test arrays with floating point numbers"""
