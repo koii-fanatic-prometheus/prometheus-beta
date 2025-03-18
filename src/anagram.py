@@ -30,5 +30,5 @@ def is_anagram(str1: str, str2: str) -> bool:
     if len(str1) != len(str2):
         return False
     
-    # Use character frequency counting
-    return sorted(str1) == sorted(str2)
+    # Use character frequency counting with sorting that works with Unicode
+    return sorted(list(str1)) == sorted(list(str2))
