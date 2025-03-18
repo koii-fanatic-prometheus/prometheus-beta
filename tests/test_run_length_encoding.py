@@ -20,8 +20,9 @@ def test_run_length_encode_edge_cases():
     assert run_length_encode("A") == [['A', 1]]
     
     # Mixed characters
-    assert run_length_encode("WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB") == \
-           [['W', 12], ['B', 1], ['W', 12], ['B', 3], ['W', 14], ['B', 1]]
+    input_str = "WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWWWWWWWB"
+    result = run_length_encode(input_str)
+    assert result == [['W', 12], ['B', 1], ['W', 12], ['B', 3], ['W', 24], ['B', 1]]
 
 def test_run_length_decode_edge_cases():
     """Test edge cases for decoding"""
