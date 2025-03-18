@@ -38,7 +38,7 @@ def find_longest_increasing_subsequence(arr: List[int]) -> Tuple[int, List[int]]
     
     # Find the longest increasing subsequence
     max_length = 1
-    max_indices = [0]  # Track all indices with max length
+    max_index = 0
     
     for i in range(1, n):
         for j in range(i):
@@ -47,15 +47,10 @@ def find_longest_increasing_subsequence(arr: List[int]) -> Tuple[int, List[int]]
                 lengths[i] = lengths[j] + 1
                 prev_indices[i] = j
         
-        # Update max length and indices
-        if lengths[i] > max_length:
+        # Update max length and index
+        if lengths[i] > max_length or (lengths[i] == max_length and arr[i] < arr[max_index]):
             max_length = lengths[i]
-            max_indices = [i]
-        elif lengths[i] == max_length:
-            max_indices.append(i)
-    
-    # Choose the subsequence with the smallest last element
-    max_index = min(max_indices, key=lambda x: arr[x])
+            max_index = i
     
     # Reconstruct the subsequence
     subsequence = []
