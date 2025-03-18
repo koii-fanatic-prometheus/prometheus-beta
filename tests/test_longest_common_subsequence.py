@@ -29,7 +29,8 @@ def test_partial_common_subsequence():
 
 def test_case_sensitivity():
     """Test case sensitivity"""
-    assert longest_common_subsequence("Hello", "hello") == ""
+    result = longest_common_subsequence("Hello", "hello")
+    assert result == "", "LCS should be empty for case-sensitive comparison"
     result = longest_common_subsequence("Hello", "Helo")
     assert result == "Hel"
 
