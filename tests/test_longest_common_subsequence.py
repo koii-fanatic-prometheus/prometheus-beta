@@ -29,10 +29,12 @@ def test_partial_common_subsequence():
 
 def test_case_sensitivity():
     """Test case sensitivity"""
-    result = longest_common_subsequence("Hello", "hello")
-    assert result == "", "LCS should be empty for case-sensitive comparison"
-    result = longest_common_subsequence("Hello", "Helo")
-    assert result == "Hel"
+    # Completely different case should return empty string
+    assert longest_common_subsequence("HELLO", "hello") == ""
+    # Partial case match should not work
+    assert longest_common_subsequence("Hello", "hello") == ""
+    # Correct case match should work
+    assert longest_common_subsequence("Hello", "Helo") == "Hel"
 
 def test_unicode_strings():
     """Test with unicode strings"""
