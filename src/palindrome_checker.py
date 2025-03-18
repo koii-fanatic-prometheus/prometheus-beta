@@ -15,6 +15,8 @@ def is_palindrome(s: str) -> bool:
         False
         >>> is_palindrome("")
         True
+        >>> is_palindrome("a1b2c22b1a")
+        True
     """
     # Remove non-alphanumeric characters and convert to lowercase
     cleaned_str = ''.join(char.lower() for char in s if char.isalnum())
