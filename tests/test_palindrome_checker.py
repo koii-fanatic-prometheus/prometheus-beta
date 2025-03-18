@@ -28,7 +28,7 @@ def test_palindrome_with_numbers():
 
 def test_palindrome_mixed_alphanumeric():
     """Test mixed alphanumeric palindromes"""
-    assert is_palindrome("a1b2c22b1a") == True
+    assert is_palindrome("a1b22b1a") == True
     assert is_palindrome("a1b2c3") == False
 
 def test_palindrome_special_chars():
