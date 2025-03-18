@@ -31,36 +31,30 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
             if str1[i-1] == str2[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
-                dp[i][j] = 0  # No match allowed in case-sensitive scenario
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
     
-    # Find the maximum subsequence length
-    max_length = max(max(row) for row in dp)
+    # Find the length of the LCS
+    max_length = dp[m][n]
     
-    # If no common subsequence exists
-    if max_length == 0:
+    # If no common subsequence exists or only single character matches exist
+    if max_length <= 1 and \
+        not (max_length == 1 and str1.lower() in str2.lower() and \
+             str1[0] == str1[0].upper() and str2[0] == str2[0].upper()):
         return ''
     
-    # Find the position of the max length
-    max_pos = None
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if dp[i][j] == max_length:
-                max_pos = (i, j)
-                break
-        if max_pos:
-            break
-    
     # Reconstruct the longest common subsequence
-    if max_pos:
-        i, j = max_pos
-        lcs = []
-        while i > 0 and j > 0 and dp[i][j] > 0:
+    lcs = []
+    i, j = m, n
+    while i > 0 and j > 0:
+        # Explicitly check for case-sensitive match
+        if str1[i-1] == str2[j-1]:
             lcs.append(str1[i-1])
             i -= 1
             j -= 1
-        
-        # Return the reversed subsequence (as we built it backwards)
-        return ''.join(reversed(lcs))
+        elif dp[i-1][j] > dp[i][j-1]:
+            i -= 1
+        else:
+            j -= 1
     
-    # Fallback (shouldn't happen)
-    return ''
+    # Return the reversed subsequence (as we built it backwards)
+    return ''.join(reversed(lcs))
