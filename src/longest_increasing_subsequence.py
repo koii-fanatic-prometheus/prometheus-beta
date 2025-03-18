@@ -29,47 +29,36 @@ def find_longest_increasing_subsequence(arr: List[int]) -> Tuple[int, List[int]]
     if not arr:
         return 0, []
     
-    # Initialize dynamic programming arrays
     n = len(arr)
-    # Length of LIS ending at each index
+    # Store the length of LIS ending at each index
     lengths = [1] * n
-    # Previous index for reconstruction
+    # Store the previous index to reconstruct the sequence
     prev_indices = [-1] * n
     
-    # Specific sequence tracking
-    specific_sequences = {
-        0: [[arr[0]]]  # Start with first element in first slot
-    }
+    # Track the max length and its ending index
     max_length = 1
+    max_index = 0
     
+    # Compute LIS 
     for i in range(1, n):
-        # Potential best match from previous lengths
         for j in range(i):
             if arr[i] > arr[j] and lengths[i] < lengths[j] + 1:
                 lengths[i] = lengths[j] + 1
                 prev_indices[i] = j
-                
-                # Add new sequences or update existing
-                if lengths[i] not in specific_sequences:
-                    specific_sequences[lengths[i]] = []
-                
-                # Generate potential sequences
-                for seq in specific_sequences.get(lengths[i]-1, []):
-                    new_seq = seq + [arr[i]]
-                    if new_seq not in specific_sequences[lengths[i]]:
-                        specific_sequences[lengths[i]].append(new_seq)
         
         # Update max length
-        max_length = max(max_length, lengths[i])
+        if lengths[i] > max_length:
+            max_length = lengths[i]
+            max_index = i
     
-    # Find the lexicographically smallest subsequence at max length
-    candidates = specific_sequences.get(max_length, [])
+    # Reconstruct subsequence
+    subsequence = []
+    current = max_index
+    while current != -1:
+        subsequence.append(arr[current])
+        current = prev_indices[current]
     
-    # If no candidates found, fallback to first element
-    if not candidates:
-        return 1, [arr[0]]
+    # Reverse to get correct order
+    subsequence.reverse()
     
-    # Select the lexicographically smallest sequence
-    result = min(candidates, key=lambda x: (len(x), x))
-    
-    return len(result), result
+    return max_length, subsequence
