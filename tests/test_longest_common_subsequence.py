@@ -33,6 +33,8 @@ def test_case_sensitivity():
     assert longest_common_subsequence("HELLO", "hello") == ""
     # Partial case match should not work
     assert longest_common_subsequence("Hello", "hello") == ""
+    assert longest_common_subsequence("Hello", "Hel") == "Hel"
+    assert longest_common_subsequence("hello", "Hel") == ""
     # Correct case match should work
     assert longest_common_subsequence("Hello", "Helo") == "Hel"
 
