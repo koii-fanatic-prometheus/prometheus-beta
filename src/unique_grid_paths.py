@@ -1,28 +1,58 @@
-def count_unique_paths(m: int, n: int) -> int:
+from typing import List, Optional
+
+def find_shortest_path(grid: List[List[int]]) -> Optional[int]:
     """
-    Count the number of unique paths from top-left to bottom-right 
-    in an m x n grid, moving only right or down.
+    Find the shortest path from top-left to bottom-right in a grid with movement constraints.
+    
+    Movement constraints:
+    - Can only move right or down
+    - Can only move to an empty cell (0)
+    - If right is blocked, must move down
     
     Args:
-        m (int): Number of rows in the grid
-        n (int): Number of columns in the grid
+        grid (List[List[int]]): N x N grid of 0s and 1s
     
     Returns:
-        int: Number of unique paths
-    
-    Raises:
-        ValueError: If m or n is less than 1
+        Optional[int]: Length of the shortest path, or None if no path exists
     """
     # Validate input
-    if m < 1 or n < 1:
-        raise ValueError("Grid dimensions must be positive integers")
+    if not grid or not grid[0]:
+        return None
     
-    # Initialize DP table
-    dp = [[1] * n for _ in range(m)]
+    n = len(grid)
     
-    # Calculate unique paths
-    for i in range(1, m):
+    # Create a DP table to store path lengths
+    dp = [[float('inf')] * n for _ in range(n)]
+    
+    # Initialize starting point
+    dp[0][0] = 1 if grid[0][0] == 0 else float('inf')
+    
+    # Fill the first row
+    for j in range(1, n):
+        # Can only move right if current and previous cell are empty
+        if grid[0][j] == 0 and grid[0][j-1] == 0:
+            dp[0][j] = dp[0][j-1] + 1
+    
+    # Fill the first column
+    for i in range(1, n):
+        # Can only move down if current and previous cell are empty
+        if grid[i][0] == 0 and grid[i-1][0] == 0:
+            dp[i][0] = dp[i-1][0] + 1
+    
+    # Fill the rest of the DP table
+    for i in range(1, n):
         for j in range(1, n):
-            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+            # Skip blocked cells
+            if grid[i][j] == 1:
+                continue
+            
+            # Try moving from left (right move)
+            if grid[i][j-1] == 0:
+                dp[i][j] = min(dp[i][j], dp[i][j-1] + 1)
+            
+            # Try moving from top (down move)
+            if grid[i-1][j] == 0:
+                dp[i][j] = min(dp[i][j], dp[i-1][j] + 1)
     
-    return dp[m-1][n-1]
+    # Return the path length to bottom-right, or None if no path exists
+    return dp[n-1][n-1] if dp[n-1][n-1] != float('inf') else None
