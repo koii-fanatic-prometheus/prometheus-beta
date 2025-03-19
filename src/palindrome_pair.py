@@ -52,8 +52,8 @@ def palindrome_pair(nums):
             # Calculate absolute difference
             diff = abs(nums[j] - nums[i])
             
-            # Ensure the difference is an actual interesting palindrome
-            if diff >= 10 and is_palindrome(diff):
+            # Allow palindrome of any length 
+            if is_palindrome(diff):
                 return True
     
     return False
