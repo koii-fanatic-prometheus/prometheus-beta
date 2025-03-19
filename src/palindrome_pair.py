@@ -47,17 +47,13 @@ def palindrome_pair(nums):
         return False
     
     # Check all possible pairs
-    diffs = []
     for i in range(len(nums)):
         for j in range(i+1, len(nums)):
             # Calculate absolute difference
             diff = abs(nums[j] - nums[i])
-            diffs.append(diff)
             
-            # More restrictive palindrome check
-            # Require a significant palindrome difference 
-            if is_palindrome(diff) and diff >= 10:
+            # Palindrome check with more lenient criteria
+            if is_palindrome(diff):
                 return True
     
-    print(f"All differences in {nums}: {diffs}")
     return False
