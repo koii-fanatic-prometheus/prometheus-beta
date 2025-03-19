@@ -42,15 +42,18 @@ def palindrome_pair(nums):
     if not all(isinstance(x, (int, float)) for x in nums):
         raise ValueError("List must contain only numeric elements")
     
+    # Minimum length to check palindrome differences
+    if len(nums) < 2:
+        return False
+    
     # Check all possible pairs
     for i in range(len(nums)):
         for j in range(i+1, len(nums)):
             # Calculate absolute difference
             diff = abs(nums[j] - nums[i])
             
-            # Check if difference is a palindrome 
-            # and the pair is not too close (to avoid trivial cases)
-            if is_palindrome(diff) and abs(nums[j] - nums[i]) > 1:
+            # Ensure the difference is an actual interesting palindrome
+            if diff >= 10 and is_palindrome(diff):
                 return True
     
     return False
