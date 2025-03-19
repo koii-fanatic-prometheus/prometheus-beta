@@ -5,9 +5,9 @@ def find_shortest_path(grid: List[List[int]]) -> Optional[int]:
     Find the shortest path from top-left to bottom-right in a grid with movement constraints.
     
     Movement constraints:
-    - Can only move right or down
+    - Can move right or down
     - Can only move to an empty cell (0)
-    - If right is blocked, must move down
+    - Must move down if right is blocked
     
     Args:
         grid (List[List[int]]): N x N grid of 0s and 1s
@@ -24,39 +24,43 @@ def find_shortest_path(grid: List[List[int]]) -> Optional[int]:
     if any(len(row) != n for row in grid):
         return None
     
-    # Create a DP table to store path lengths
-    dp = [[float('inf')] * n for _ in range(n)]
-    
-    # Initialize starting point
-    if grid[0][0] == 1:
+    # If start or end is blocked, no path is possible
+    if grid[0][0] == 1 or grid[n-1][n-1] == 1:
         return None
-    dp[0][0] = 1
     
-    # Fill the first row
-    for j in range(1, n):
-        # Can only move right if current and previous cells are empty
-        if grid[0][j] == 0:
-            dp[0][j] = dp[0][j-1] + 1 if grid[0][j-1] == 0 else float('inf')
+    # Depth-first search with path length tracking
+    def dfs(x: int, y: int, visited: set, current_path: List[tuple]) -> Optional[int]:
+        # Out of bounds or blocked cell
+        if (x < 0 or x >= n or y < 0 or y >= n or 
+            grid[x][y] == 1 or (x, y) in visited):
+            return None
+        
+        # Reached destination
+        if x == n-1 and y == n-1:
+            return len(current_path)
+        
+        # Mark current cell as visited
+        visited.add((x, y))
+        
+        # Try moving right first (if possible)
+        if y+1 < n and grid[x][y+1] == 0:
+            right_path = dfs(x, y+1, visited.copy(), current_path + [(x, y+1)])
+        else:
+            right_path = None
+        
+        # If right is blocked, try moving down
+        down_path = dfs(x+1, y, visited.copy(), current_path + [(x+1, y)])
+        
+        # Return the shortest valid path
+        if right_path is not None and down_path is not None:
+            return min(right_path, down_path)
+        elif right_path is not None:
+            return right_path
+        elif down_path is not None:
+            return down_path
+        
+        return None
     
-    # Fill the first column
-    for i in range(1, n):
-        # Can only move down if current and previous cells are empty
-        if grid[i][0] == 0:
-            dp[i][0] = dp[i-1][0] + 1 if grid[i-1][0] == 0 else float('inf')
-    
-    # Fill the rest of the DP table
-    for i in range(1, n):
-        for j in range(1, n):
-            # Skip blocked cells
-            if grid[i][j] == 1:
-                continue
-            
-            # Possible paths
-            up_path = dp[i-1][j] + 1 if grid[i-1][j] == 0 else float('inf')
-            left_path = dp[i][j-1] + 1 if grid[i][j-1] == 0 else float('inf')
-            
-            # Choose the minimum valid path
-            dp[i][j] = min(up_path, left_path)
-    
-    # Return the path length to bottom-right, or None if no path exists
-    return dp[n-1][n-1] if dp[n-1][n-1] != float('inf') else None
+    # Start DFS from top-left
+    result = dfs(0, 0, set(), [(0, 0)])
+    return result
