@@ -27,24 +27,26 @@ def find_pair_with_target(nums, target):
     if not nums:
         raise ValueError("Input list cannot be empty")
     
-    # Use a hash map to store complements
-    complement_map = {}
+    # Use a hash map to store first indices of each number
+    first_indices = {}
     result = []
     
     # Iterate through the list
     for i, num in enumerate(nums):
         complement = target - num
         
-        # Check if complement exists and came before current number
-        if complement in complement_map:
-            # Store the pair based on original indices
-            pair = tuple(sorted([complement_map[complement], i]))
-            if pair not in result:
-                result.append(pair)
+        # Check if complement exists in previous indices
+        if complement in first_indices:
+            # Generate all possible pairs with this complement and current number
+            for j in first_indices[complement]:
+                pair = tuple(sorted([j, i]))
+                if pair not in result:
+                    result.append(pair)
         
-        # Store current number's index (first occurrence)
-        if num not in complement_map:
-            complement_map[num] = i
+        # Add current index to the list of indices for this number
+        if num not in first_indices:
+            first_indices[num] = []
+        first_indices[num].append(i)
     
     # Return unique pairs sorted
     return sorted(result)
