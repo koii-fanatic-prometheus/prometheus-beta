@@ -38,5 +38,5 @@ def find_longest_consecutive_sequence(nums):
             if len(current_sequence) > len(longest_sequence):
                 longest_sequence = current_sequence
     
-    # If no consecutive sequence found, return the first single number
+    # If no consecutive sequence found, return the smallest number
     return longest_sequence if longest_sequence else [min(nums)]
