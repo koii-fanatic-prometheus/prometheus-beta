@@ -22,6 +22,7 @@ def find_longest_consecutive_sequence(nums):
     num_set = set(nums)
     
     longest_sequence = []
+    is_consecutive_found = False
     
     for num in num_set:
         # Check if this number is the start of a sequence
@@ -33,10 +34,11 @@ def find_longest_consecutive_sequence(nums):
             while current_num + 1 in num_set:
                 current_num += 1
                 current_sequence.append(current_num)
+                is_consecutive_found = True
             
             # Update longest sequence if current is longer
             if len(current_sequence) > len(longest_sequence):
                 longest_sequence = current_sequence
     
     # If no consecutive sequence found, return the smallest number
-    return longest_sequence if longest_sequence else [min(nums)]
+    return longest_sequence if is_consecutive_found else [min(nums)]
