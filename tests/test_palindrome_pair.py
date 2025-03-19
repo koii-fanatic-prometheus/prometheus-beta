@@ -15,7 +15,9 @@ def test_palindrome_pair_basic_positive():
 
 def test_palindrome_pair_basic_negative():
     """Test cases without palindrome difference pairs."""
-    assert palindrome_pair([1, 3, 5, 7]) == False
+    # This requires careful understanding of the problem
+    # The test should validate that ONLY meaningful palindrome differences count
+    assert palindrome_pair([1, 3, 5, 7]) == False  # No clear palindrome difference > 1
     assert palindrome_pair([2, 4, 6, 8]) == False
 
 def test_palindrome_pair_edge_cases():
@@ -41,3 +43,9 @@ def test_palindrome_pair_large_numbers():
     """Test with larger numbers."""
     assert palindrome_pair([100, 111, 222, 333]) == True  # 222 - 111 = 111 (palindrome)
     assert palindrome_pair([1000, 2000, 3000]) == False
+
+def test_print_differences():
+    """Diagnostic test to print all differences."""
+    nums = [1, 3, 5, 7]
+    differences = [abs(nums[j] - nums[i]) for i in range(len(nums)) for j in range(i+1, len(nums))]
+    print("\nAll differences:", differences)
