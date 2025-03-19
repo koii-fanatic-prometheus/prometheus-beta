@@ -30,9 +30,15 @@ def find_unique_pairs(numbers: List[int]) -> List[Tuple[int, int]]:
     # Use set to track unique pairs and avoid duplicates
     unique_pairs = set()
     
+    # Use a set of unique numbers to avoid duplicate pairs
+    unique_numbers = set(numbers)
+    
+    # Generate pairs using sorted list of unique numbers
+    unique_list = sorted(unique_numbers)
+    
     # Generate pairs using nested loop
-    for i in range(len(numbers)):
-        for j in range(i + 1, len(numbers)):
-            unique_pairs.add(tuple(sorted((numbers[i], numbers[j]))))
+    for i in range(len(unique_list)):
+        for j in range(i + 1, len(unique_list)):
+            unique_pairs.add((unique_list[i], unique_list[j]))
     
     return list(unique_pairs)
