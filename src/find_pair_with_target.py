@@ -35,11 +35,12 @@ def find_pair_with_target(nums, target):
     for i, num in enumerate(nums):
         complement = target - num
         
-        # Check if complement exists in the map
+        # Check if complement exists and came before current number
         if complement in complement_map:
-            # Found a pair, add indices to result
-            # Use set to avoid duplicate pairs, sort indices to maintain order
-            result.append(tuple(sorted([complement_map[complement], i])))
+            # Store the pair based on original indices
+            pair = tuple(sorted([complement_map[complement], i]))
+            if pair not in result:
+                result.append(pair)
         
         # Store current number's index (first occurrence)
         if num not in complement_map:
