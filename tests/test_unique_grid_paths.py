@@ -1,32 +1,63 @@
 import pytest
-from src.unique_grid_paths import count_unique_paths
+from src.unique_grid_paths import find_shortest_path
 
-def test_standard_grid_paths():
-    """Test paths for common grid sizes"""
-    assert count_unique_paths(2, 3) == 3
-    assert count_unique_paths(3, 2) == 3
-    assert count_unique_paths(3, 3) == 6
+def test_simple_path():
+    """Test a simple grid with a clear path"""
+    grid = [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+    assert find_shortest_path(grid) == 4
 
-def test_single_row_column():
-    """Test paths for single row or column grids"""
-    assert count_unique_paths(1, 5) == 1
-    assert count_unique_paths(5, 1) == 1
+def test_no_path():
+    """Test a grid with no possible path"""
+    grid = [
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]
+    ]
+    assert find_shortest_path(grid) is None
 
-def test_large_grid():
-    """Test paths for larger grid"""
-    assert count_unique_paths(10, 10) == 48620
+def test_single_cell():
+    """Test a single-cell grid"""
+    grid = [[0]]
+    assert find_shortest_path(grid) == 1
 
-def test_small_grid():
-    """Test paths for small grid"""
-    assert count_unique_paths(1, 1) == 1
+def test_single_cell_blocked():
+    """Test a single-cell blocked grid"""
+    grid = [[1]]
+    assert find_shortest_path(grid) is None
 
-def test_invalid_input():
-    """Test error handling for invalid grid dimensions"""
-    with pytest.raises(ValueError, match="Grid dimensions must be positive integers"):
-        count_unique_paths(0, 5)
-    
-    with pytest.raises(ValueError, match="Grid dimensions must be positive integers"):
-        count_unique_paths(5, 0)
-    
-    with pytest.raises(ValueError, match="Grid dimensions must be positive integers"):
-        count_unique_paths(-1, 5)
+def test_constrained_path():
+    """Test a grid with complex movement constraints"""
+    grid = [
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [1, 0, 0, 0],
+        [0, 0, 1, 0]
+    ]
+    assert find_shortest_path(grid) == 6
+
+def test_empty_grid():
+    """Test an empty grid"""
+    grid = []
+    assert find_shortest_path(grid) is None
+
+def test_non_square_grid():
+    """Test a non-square grid"""
+    grid = [
+        [0, 0],
+        [0, 0],
+        [0, 0]
+    ]
+    assert find_shortest_path(grid) is None  # As per implementation, requires square grid
+
+def test_only_down_movement():
+    """Test a grid where only downward movement is possible"""
+    grid = [
+        [0, 1, 1],
+        [0, 1, 1],
+        [0, 0, 0]
+    ]
+    assert find_shortest_path(grid) == 3
