@@ -33,6 +33,7 @@ def test_invalid_input_type():
         find_most_frequent_char(None)
 
 def test_case_sensitivity():
-    """Test that the function is case-sensitive."""
-    assert find_most_frequent_char("Hello") == "l"
-    assert find_most_frequent_char("hEllo") == "h"
+    """Test that the function respects different cases."""
+    assert find_most_frequent_char("aAaA") == "a"
+    assert find_most_frequent_char("AaAa") == "A"
+    assert find_most_frequent_char("hEllo") == "l"
