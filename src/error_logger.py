@@ -2,6 +2,18 @@ import logging
 import functools
 import traceback
 import sys
+import os
+
+def ensure_log_file_directory(log_file):
+    """
+    Ensure the directory for the log file exists.
+    
+    Args:
+        log_file (str): Path to the log file.
+    """
+    log_dir = os.path.dirname(log_file)
+    if log_dir and not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
 def log_error(log_file='error.log', log_level=logging.ERROR):
     """
@@ -20,11 +32,15 @@ def log_error(log_file='error.log', log_level=logging.ERROR):
             try:
                 return func(*args, **kwargs)
             except Exception as e:
+                # Ensure log file directory exists
+                ensure_log_file_directory(log_file)
+                
                 # Configure logging
                 logging.basicConfig(
                     filename=log_file, 
                     level=log_level, 
-                    format='%(asctime)s - %(levelname)s - %(message)s'
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    filemode='a'  # Append mode
                 )
                 
                 # Get detailed error information
@@ -56,11 +72,15 @@ def custom_error_log(message, log_file='error.log', log_level=logging.ERROR):
         log_file (str, optional): Path to the log file. Defaults to 'error.log'.
         log_level (int, optional): Logging level. Defaults to logging.ERROR.
     """
+    # Ensure log file directory exists
+    ensure_log_file_directory(log_file)
+    
     # Configure logging
     logging.basicConfig(
         filename=log_file, 
         level=log_level, 
-        format='%(asctime)s - %(levelname)s - %(message)s'
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        filemode='a'  # Append mode
     )
     
     # Log the custom message
