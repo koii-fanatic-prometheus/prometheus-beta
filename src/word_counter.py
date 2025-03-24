@@ -17,7 +17,11 @@ def count_words(text: str) -> int:
     if text is None:
         return 0
     
-    # Convert to string to handle potential non-string inputs
+    # Convert to string, handling list and other non-string inputs 
+    # Note: use first element for lists, convert other types to string
+    if isinstance(text, list):
+        text = text[0] if text else ""
+    
     text = str(text).strip()
     
     # If string is empty after stripping, return 0
