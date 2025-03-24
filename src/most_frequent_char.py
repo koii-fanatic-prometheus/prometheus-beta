@@ -24,7 +24,14 @@ def find_most_frequent_char(input_string: str) -> str:
     
     # Count character frequencies
     char_freq = {}
-    for char in input_string:
+    first_occurrence = {}
+    
+    for idx, char in enumerate(input_string):
+        # Track first occurrence index
+        if char not in first_occurrence:
+            first_occurrence[char] = idx
+        
+        # Count frequencies
         char_freq[char] = char_freq.get(char, 0) + 1
     
     # Find the most frequent character
@@ -32,9 +39,12 @@ def find_most_frequent_char(input_string: str) -> str:
     most_frequent = input_string[0]  # Default to first character
     
     for char, freq in char_freq.items():
+        # If frequency is higher, update
         if freq > max_freq:
             max_freq = freq
             most_frequent = char
-        # If frequencies are equal, keep the first occurrence
+        # If frequencies are equal, compare first occurrence index
+        elif freq == max_freq and first_occurrence[char] < first_occurrence[most_frequent]:
+            most_frequent = char
     
     return most_frequent
