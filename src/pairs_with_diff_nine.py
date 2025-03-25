@@ -19,7 +19,8 @@ def find_sum_of_pairs_with_diff_nine(file_path):
             # Convert file contents to list of integers
             numbers = [int(line.strip()) for line in file if line.strip()]
         
-        # Track the sum of pairs
+        # Keep track of unique pairs to avoid double-counting
+        unique_pairs = set()
         total_sum = 0
         
         # Create a set for O(1) lookup
@@ -28,13 +29,14 @@ def find_sum_of_pairs_with_diff_nine(file_path):
         # Find pairs with difference of 9
         for num in numbers:
             # Check both num + 9 and num - 9
-            if num + 9 in number_set:
+            if num + 9 in number_set and (num, num+9) not in unique_pairs and (num+9, num) not in unique_pairs:
                 total_sum += num + (num + 9)
-            elif num - 9 in number_set:
+                unique_pairs.add((num, num+9))
+            elif num - 9 in number_set and (num-9, num) not in unique_pairs and (num, num-9) not in unique_pairs:
                 total_sum += num + (num - 9)
+                unique_pairs.add((num-9, num))
         
-        # Divide by 2 to avoid counting each pair twice
-        return total_sum // 2
+        return total_sum
     
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
