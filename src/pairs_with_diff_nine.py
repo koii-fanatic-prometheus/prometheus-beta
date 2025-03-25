@@ -19,22 +19,29 @@ def find_sum_of_pairs_with_diff_nine(file_path):
             # Convert file contents to list of integers
             numbers = [int(line.strip()) for line in file if line.strip()]
         
-        # Keep track of unique pairs to avoid double-counting
-        unique_pairs = set()
-        total_sum = 0
+        # If not enough numbers, return 0
+        if len(numbers) < 2:
+            return 0
         
-        # Iterate through all possible pairs
+        # Keep track of unique pairs to avoid double-counting
+        total_sum = 0
+        processed_pairs = set()
+        
+        # Check every pair of numbers
         for i in range(len(numbers)):
             for j in range(i+1, len(numbers)):
-                # Check if the pair has a difference of 9
+                # Check if the pair has a difference of 9 in either direction
                 if abs(numbers[i] - numbers[j]) == 9:
-                    # Sort the pair to ensure no duplicates
+                    # Create a unique representation of the pair
                     pair = tuple(sorted((numbers[i], numbers[j])))
                     
-                    # Add if this unique pair hasn't been seen before
-                    if pair not in unique_pairs:
-                        total_sum += sum(pair)
-                        unique_pairs.add(pair)
+                    # If this pair hasn't been processed
+                    if pair not in processed_pairs:
+                        # Add the sum of the pair
+                        total_sum += numbers[i] + numbers[j]
+                        
+                        # Mark this pair as processed
+                        processed_pairs.add(pair)
         
         return total_sum
     
