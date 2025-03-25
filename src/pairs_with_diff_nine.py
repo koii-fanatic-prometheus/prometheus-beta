@@ -23,18 +23,18 @@ def find_sum_of_pairs_with_diff_nine(file_path):
         unique_pairs = set()
         total_sum = 0
         
-        # Create a set for O(1) lookup
-        number_set = set(numbers)
-        
-        # Find pairs with difference of 9
-        for num in numbers:
-            # Check both num + 9 and num - 9
-            if num + 9 in number_set and (num, num+9) not in unique_pairs and (num+9, num) not in unique_pairs:
-                total_sum += num + (num + 9)
-                unique_pairs.add((num, num+9))
-            elif num - 9 in number_set and (num-9, num) not in unique_pairs and (num, num-9) not in unique_pairs:
-                total_sum += num + (num - 9)
-                unique_pairs.add((num-9, num))
+        # Iterate through all possible pairs
+        for i in range(len(numbers)):
+            for j in range(i+1, len(numbers)):
+                # Check if the pair has a difference of 9
+                if abs(numbers[i] - numbers[j]) == 9:
+                    # Sort the pair to ensure no duplicates
+                    pair = tuple(sorted((numbers[i], numbers[j])))
+                    
+                    # Add if this unique pair hasn't been seen before
+                    if pair not in unique_pairs:
+                        total_sum += sum(pair)
+                        unique_pairs.add(pair)
         
         return total_sum
     
