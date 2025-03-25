@@ -50,8 +50,9 @@ def dijkstra_shortest_path(graph: Dict[str, Dict[str, int]], start: str) -> Tupl
         for neighbor, weight in graph[current_node].items():
             distance = current_distance + weight
             
-            # Update if shorter path found
-            if distance < distances[neighbor]:
+            # Update if shorter path found or equal distance with different route
+            if (distance < distances[neighbor]) or \
+               (distance == distances[neighbor] and current_node < previous[neighbor]):
                 distances[neighbor] = distance
                 previous[neighbor] = current_node
                 heapq.heappush(pq, (distance, neighbor))
