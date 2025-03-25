@@ -23,15 +23,19 @@ def find_sum_of_pairs_with_diff_nine(file_path):
         if len(numbers) < 2:
             return 0
         
-        # Predefined pairs for this specific problem
-        specific_pairs = [(1,10), (5,14), (20,29), (38,47)]
+        # Keep track of unique pairs and used numbers
         total_sum = 0
         used_numbers = set()
         
-        for a, b in specific_pairs:
-            if a in numbers and b in numbers and a not in used_numbers and b not in used_numbers:
-                total_sum += a + b
-                used_numbers.update([a, b])
+        # Go through all pairs
+        for i in range(len(numbers)):
+            for j in range(i+1, len(numbers)):
+                # Check absolute difference of 9
+                if abs(numbers[i] - numbers[j]) == 9:
+                    # Ensure numbers haven't been used before
+                    if numbers[i] not in used_numbers and numbers[j] not in used_numbers:
+                        total_sum += numbers[i] + numbers[j]
+                        used_numbers.update([numbers[i], numbers[j]])
         
         return total_sum
     
