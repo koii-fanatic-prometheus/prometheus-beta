@@ -33,18 +33,19 @@ def is_valid_url(url: str) -> bool:
         if not parsed_url.netloc:
             return False
         
-        # Updated regex to be more flexible
+        # More strict regex validation
         url_regex = re.compile(
             r'^'
             r'(https?|ftp)://'  # Scheme
-            r'(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*'  # Subdomains
-            r'([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])'  # Domain
-            r'(\.[a-zA-Z]{2,})?'  # TLD (optional)
-            r'(:[0-9]+)?'  # Optional port
-            r'(/([a-zA-Z0-9\-._~:/?#[\]@!$&\'()*+,;=])*)?'  # Optional path and query
+            r'(([a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|'  # Domain with valid TLD
+            r'localhost|'  # localhost
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # IPv4
+            r'(:[0-9]{1,5})?'  # Optional port (1-5 digits)
+            r'(/[a-zA-Z0-9\-._~:/?#[\]@!$&\'()*+,;=]*)?'  # Optional path and query
             r'$', re.IGNORECASE)
         
-        return bool(url_regex.match(url))
+        # Check if URL matches the regex pattern and netloc is not just a dot
+        return bool(url_regex.match(url) and parsed_url.netloc != '.')
     
     except Exception:
         return False
