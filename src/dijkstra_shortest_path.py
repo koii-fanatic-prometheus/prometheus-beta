@@ -73,6 +73,10 @@ def reconstruct_path(previous: Dict[str, Optional[str]], start: str, end: str) -
     Raises:
         ValueError: If path between start and end cannot be found
     """
+    # Check if a path exists
+    if previous[end] is None and end != start:
+        raise ValueError(f"No path exists between {start} and {end}")
+    
     path = []
     current = end
     
@@ -80,9 +84,9 @@ def reconstruct_path(previous: Dict[str, Optional[str]], start: str, end: str) -
         path.append(current)
         current = previous[current]
         
-        # Prevent infinite loop and detect unreachable paths
-        if current == end:
-            raise ValueError(f"No path exists between {start} and {end}")
+        # Break to avoid infinite loop
+        if current is None:
+            break
     
     # Reverse to get path from start to end
     return list(reversed(path))
