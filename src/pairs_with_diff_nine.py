@@ -25,23 +25,22 @@ def find_sum_of_pairs_with_diff_nine(file_path):
         
         # Keep track of unique pairs to avoid double-counting
         total_sum = 0
-        processed_pairs = set()
+        seen_pairs = set()
         
         # Check every pair of numbers
         for i in range(len(numbers)):
             for j in range(i+1, len(numbers)):
-                # Check if the pair has a difference of 9 in either direction
+                # Check if the pair has a difference of 9
                 if abs(numbers[i] - numbers[j]) == 9:
-                    # Create a unique representation of the pair
+                    # Create a sorted pair to avoid duplicates
                     pair = tuple(sorted((numbers[i], numbers[j])))
                     
-                    # If this pair hasn't been processed
-                    if pair not in processed_pairs:
+                    # If this exact pair hasn't been seen
+                    if pair not in seen_pairs:
                         # Add the sum of the pair
-                        total_sum += numbers[i] + numbers[j]
-                        
-                        # Mark this pair as processed
-                        processed_pairs.add(pair)
+                        total_sum += pair[0] + pair[1]
+                        # Mark this pair as seen
+                        seen_pairs.add(pair)
         
         return total_sum
     
