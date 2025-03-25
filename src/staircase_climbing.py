@@ -20,7 +20,7 @@ def count_staircase_combinations(stair_lengths):
     if any(length <= 0 for length in stair_lengths):
         raise ValueError("All stair lengths must be positive integers")
     
-    # Preprocess the stair lengths to get the total height
+    # Allowed step sizes are always 1 and 2 (given in the problem description)
     total_height = sum(stair_lengths)
     
     # Dynamic programming to count combinations
@@ -30,15 +30,12 @@ def count_staircase_combinations(stair_lengths):
     # Base case
     dp[0] = 1  # One way to reach height 0 (starting point)
     
-    # Iterate through the stair lengths to ensure we only use valid steps
-    valid_steps = set(stair_lengths)
-    
     # Iterate through possible heights
     for height in range(1, total_height + 1):
-        # Check each possible step length
-        for step in valid_steps:
-            # If we can reach this height by taking this step
-            if height >= step:
-                dp[height] += dp[height - step]
+        # Can climb 1 or 2 steps
+        if height >= 1:
+            dp[height] += dp[height - 1]
+        if height >= 2:
+            dp[height] += dp[height - 2]
     
     return dp[total_height]
