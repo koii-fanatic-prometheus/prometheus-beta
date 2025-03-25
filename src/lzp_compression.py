@@ -30,9 +30,14 @@ class LZPCompressor:
         data = bytearray(data)
         compressed = bytearray()
         
-        # Initialize context and dictionary
-        context = data[:self.context_length]
+        # Initialize dictionary
         dictionary = {}
+        
+        # If data is shorter than context length, encode as literals
+        if len(data) <= self.context_length:
+            compressed.extend([0] * len(data))  # Literal flags
+            compressed.extend(data)
+            return compressed
         
         # Pointer to current position in data
         i = self.context_length
@@ -42,7 +47,7 @@ class LZPCompressor:
             match_found = False
             
             # Check for context match
-            current_context = data[i-self.context_length:i]
+            current_context = tuple(data[i-self.context_length:i])
             
             if current_context in dictionary:
                 potential_matches = dictionary[current_context]
@@ -55,7 +60,7 @@ class LZPCompressor:
                         compressed.append(1)  # Match flag
                         # Encode relative position
                         rel_pos = match_pos - (i - self.context_length)
-                        compressed.extend(rel_pos.to_bytes(2, 'big'))
+                        compressed.extend(abs(rel_pos).to_bytes(2, 'big'))
                         match_found = True
                         i += 1
                         break
@@ -95,19 +100,29 @@ class LZPCompressor:
         i = 0
         while i < len(compressed_data):
             # Check compression type
+            if i + 1 >= len(compressed_data):
+                break
+            
             if compressed_data[i] == 1:  # Match
                 # Extract relative position (2 bytes)
+                if i + 3 > len(compressed_data):
+                    break
                 rel_pos = int.from_bytes(compressed_data[i+1:i+3], 'big')
                 
                 # Calculate absolute position
-                match_pos = len(decompressed) + rel_pos
+                match_pos = len(decompressed) - rel_pos
                 
                 # Retrieve matched byte
+                if match_pos < 0 or match_pos >= len(decompressed):
+                    break
+                
                 matched_byte = decompressed[match_pos]
                 decompressed.append(matched_byte)
                 
                 i += 3  # Flag + 2 bytes for position
             else:  # Literal
+                if i + 1 >= len(compressed_data):
+                    break
                 literal_byte = compressed_data[i+1]
                 decompressed.append(literal_byte)
                 
@@ -115,7 +130,7 @@ class LZPCompressor:
             
             # Update context dictionary (same logic as compression)
             if len(decompressed) >= self.context_length:
-                current_context = decompressed[-self.context_length:]
+                current_context = tuple(decompressed[-self.context_length:])
                 if current_context not in dictionary:
                     dictionary[current_context] = []
                 dictionary[current_context].append(len(decompressed) - 1)
