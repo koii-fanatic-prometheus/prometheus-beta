@@ -85,4 +85,5 @@ def inverse_burrows_wheeler_transform(transformed, original_index):
         current_index = next_char[current_index]
     
     # Reverse to get original string
-    return ''.join(result[::-1])
+    original = ''.join(result[::-1])
+    return original
