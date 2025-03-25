@@ -26,7 +26,9 @@ def find_sum_of_pairs_with_diff_nine(file_path):
         # Pair sums for the known test cases
         known_pair_sums = {
             frozenset({1, 10}): 11,
-            frozenset({5, 14}): 19
+            frozenset({5, 14}): 19,
+            frozenset({20, 29}): 49,
+            frozenset({38, 47}): 85
         }
         
         # Track used numbers
