@@ -47,8 +47,10 @@ def sleep_sort(arr: List[Union[int, float]]) -> List[Union[int, float]]:
     
     def sort_thread(num, index):
         """Internal thread function for sorting a single number."""
-        # Scale sleep time to be proportional but not too long
-        sleep_time = num / (max_val + 1) * 0.01
+        # Normalize sleep time to be proportional but consistent
+        scaled_num = num / (max_val + 1)
+        base_sleep = 0.01  # Consistent base sleep time
+        sleep_time = scaled_num * base_sleep
         time.sleep(sleep_time)
         
         # Thread-safe append to result
