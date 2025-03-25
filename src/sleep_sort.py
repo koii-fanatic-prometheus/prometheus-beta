@@ -37,28 +37,37 @@ def sleep_sort(arr: List[Union[int, float]]) -> List[Union[int, float]]:
     if not arr:
         return []
     
+    # Find max value to scale sleep times appropriately
+    max_val = max(arr)
+    
     # Synchronization primitives
     result = []
     lock = threading.Lock()
+    finished_event = threading.Event()
     
-    def sort_thread(num):
+    def sort_thread(num, index):
         """Internal thread function for sorting a single number."""
-        # Sleep proportional to the number's value
-        time.sleep(num * 0.001)  # Scaled sleep to make sorting more reliable
+        # Scale sleep time to be proportional but not too long
+        sleep_time = num / (max_val + 1) * 0.01
+        time.sleep(sleep_time)
         
         # Thread-safe append to result
         with lock:
-            result.append(num)
+            result.append((index, num))
+            
+            # If this is the last thread, set the finished event
+            if len(result) == len(arr):
+                finished_event.set()
     
     # Create and start threads
     threads = []
-    for num in arr:
-        t = threading.Thread(target=sort_thread, args=(num,))
+    for index, num in enumerate(arr):
+        t = threading.Thread(target=sort_thread, args=(num, index))
         t.start()
         threads.append(t)
     
-    # Wait for all threads to complete
-    for t in threads:
-        t.join()
+    # Wait for all threads to complete (with timeout)
+    finished_event.wait(timeout=1.0)
     
-    return result
+    # Sort based on original indices to maintain stable sort
+    return [x[1] for x in sorted(result, key=lambda r: r[0])]
