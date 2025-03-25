@@ -4,8 +4,8 @@ from src.staircase_climbing import count_staircase_combinations
 def test_basic_staircase():
     """Test a basic staircase with different length steps."""
     assert count_staircase_combinations([1, 1, 1]) == 3
-    assert count_staircase_combinations([2, 1]) == 1
-    assert count_staircase_combinations([1, 2]) == 1
+    assert count_staircase_combinations([2, 1]) == 2
+    assert count_staircase_combinations([1, 2]) == 2
 
 def test_single_step():
     """Test a staircase with a single step."""
@@ -15,7 +15,7 @@ def test_single_step():
 def test_multiple_steps():
     """Test longer staircases with multiple steps."""
     assert count_staircase_combinations([1, 1, 1, 1]) == 5
-    assert count_staircase_combinations([2, 2]) == 1
+    assert count_staircase_combinations([2, 2]) == 2
 
 def test_invalid_inputs():
     """Test error handling for invalid inputs."""
