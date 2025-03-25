@@ -27,12 +27,9 @@ def change_file_permissions(file_path, permissions):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
     
-    # Validate permissions are in octal format
-    try:
-        # Ensure permissions are in octal format
-        oct(permissions)
-    except TypeError:
-        raise ValueError("Invalid permissions format. Use octal representation like 0o755.")
+    # Validate permissions are in valid octal range (0-0o777)
+    if permissions < 0 or permissions > 0o777:
+        raise ValueError("Permissions must be between 0 and 0o777")
     
     # Change file permissions
     try:
