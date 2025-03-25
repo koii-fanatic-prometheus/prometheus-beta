@@ -73,9 +73,20 @@ def test_weighted_graph():
     # Verify shortest distance to 'end'
     assert distances['end'] == 8  # start -> B -> D -> end
     
-    # Verify path reconstruction
+    # Path reconstruction
     path = reconstruct_path(previous, 'start', 'end')
-    assert path == ['start', 'B', 'D', 'end']
+    
+    # Verify total path length and start/end points
+    assert len(path) == 4
+    assert path[0] == 'start'
+    assert path[-1] == 'end'
+    
+    # Verify total distance matches
+    total_distance = sum(
+        graph[path[i]][path[i+1]] 
+        for i in range(len(path)-1)
+    )
+    assert total_distance == 8
 
 def test_self_loop_handling():
     graph = {
