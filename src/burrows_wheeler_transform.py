@@ -56,37 +56,33 @@ def inverse_burrows_wheeler_transform(transformed, original_index):
     if not transformed or original_index < 0 or original_index >= len(transformed):
         raise ValueError("Invalid transformed string or index")
     
-    # Create first and last column
+    # First-Last Property method
+    # Create sorted first and last columns
     first_column = sorted(transformed)
     
-    # Create mapping array
+    # Create mapping
     n = len(transformed)
-    next_index = [0] * n
+    next_char = [0] * n
     char_count = {}
     
-    # Prepare count dictionary for each character
-    char_freq = {}
-    for char in transformed:
-        char_freq[char] = char_freq.get(char, 0) + 1
-    
-    # Compute next index using first and last columns
+    # Compute next mapping
     for i in range(n):
         current_char = transformed[i]
         
-        # Find the position of this occurrence of current_char in first column
         if current_char not in char_count:
             char_count[current_char] = 0
         
-        # Find the next index by counting occurrences
-        next_index[i] = first_column.index(current_char, char_count[current_char])
+        # Find position in sorted first column
+        next_char[i] = first_column.index(current_char, char_count[current_char])
         char_count[current_char] += 1
     
-    # Reconstruct the original string
+    # Reconstruct sequence
     result = []
     current_index = original_index
     
-    for _ in range(n - 1):  # Exclude terminator
+    for _ in range(n - 1):  # Skip terminator
         result.append(transformed[current_index])
-        current_index = next_index[current_index]
+        current_index = next_char[current_index]
     
-    return ''.join(result[::-1])  # Reverse to get original string
+    # Reverse to get original string
+    return ''.join(result[::-1])
