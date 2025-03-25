@@ -33,10 +33,11 @@ def is_valid_url(url: str) -> bool:
         if not parsed_url.netloc:
             return False
         
-        # More strict regex validation
+        # More comprehensive regex validation
         url_regex = re.compile(
             r'^'
             r'(https?|ftp)://'  # Scheme
+            r'(([a-zA-Z0-9_-]+:)?[a-zA-Z0-9_-]+@)?'  # Optional authentication
             r'(([a-zA-Z0-9](?:[a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|'  # Domain with valid TLD
             r'localhost|'  # localhost
             r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # IPv4
