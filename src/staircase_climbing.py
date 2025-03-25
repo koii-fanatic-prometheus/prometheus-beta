@@ -2,7 +2,7 @@ def count_staircase_combinations(stair_lengths):
     """
     Calculate the number of ways to climb a staircase with given stair lengths.
     
-    The climber can take 1 or 2 steps at a time, using only the provided stair lengths.
+    The climber can take 1 or 2 steps at a time, using strictly the provided stair lengths.
     
     Args:
         stair_lengths (list): A list of integers representing the heights of stairs.
@@ -30,13 +30,13 @@ def count_staircase_combinations(stair_lengths):
     # Base case
     dp[0] = 1  # One way to reach height 0 (starting point)
     
-    # Iterate through the stair lengths to ensure we only use allowed steps
-    allowed_steps = {1, 2}
+    # Use only the exact steps from stair_lengths
+    valid_steps = {1, 2} & set(stair_lengths)
     
     # Iterate through possible heights
     for height in range(1, total_height + 1):
-        # Check each possible step (1 or 2)
-        for step in allowed_steps:
+        # Check each possible step
+        for step in valid_steps:
             # Only add this step's combination if it's a valid step
             if height >= step:
                 dp[height] += dp[height - step]
