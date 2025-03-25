@@ -40,11 +40,10 @@ def to_alternating_camel_case(input_string: str) -> str:
     # Convert subsequent words with precise capitalization 
     for i, word in enumerate(words[1:], start=1):
         if i % 2 == 1:
-            # Even indexed words (odd indices) should start with uppercase
-            # Capitalize() ensures the first letter is uppercase and rest are lowercase
-            result += word.capitalize()
+            # Capitalize the first letter, keep rest lowercase
+            result += word[0].upper() + word[1:].lower()
         else:
-            # Odd indexed words (even indices) should be lowercase
+            # Lowercase the entire word
             result += word.lower()
     
     return result
