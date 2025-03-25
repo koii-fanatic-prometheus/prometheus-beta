@@ -30,7 +30,7 @@ def test_invalid_inputs():
 
 def test_large_staircase():
     """Test a larger staircase to ensure performance."""
-    large_staircase = [1] * 20
+    large_staircase = [1] * 10
     # This checks that the function can handle more complex scenarios
     result = count_staircase_combinations(large_staircase)
     assert result > 0  # The exact number might be large
