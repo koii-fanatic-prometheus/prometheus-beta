@@ -41,7 +41,7 @@ def to_alternating_camel_case(input_string: str) -> str:
     for i, word in enumerate(words[1:], start=1):
         # Capitalize if index is odd (for even indexing after first word)
         if i % 2 == 1:
-            result += word.capitalize()
+            result += word.title()
         else:
             result += word.lower()
     
