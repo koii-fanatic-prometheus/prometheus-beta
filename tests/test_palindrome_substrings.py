@@ -27,7 +27,7 @@ def test_longer_palindromic_string():
 
 def test_complex_palindrome():
     """Test a complex string with various palindromic substrings."""
-    assert count_palindromic_substrings("aabaa") == 7
+    assert count_palindromic_substrings("aabaa") == 9
 
 def test_no_repeats():
     """Test a string with no repeated characters."""
@@ -35,4 +35,4 @@ def test_no_repeats():
 
 def test_alternating_characters():
     """Test a string with alternating characters."""
-    assert count_palindromic_substrings("xyxyx") == 7
+    assert count_palindromic_substrings("xyxyx") == 9
