@@ -15,7 +15,7 @@ def test_min_path_sum_basic():
     root.left.left = TreeNode(2)
     root.left.right = TreeNode(8)
     
-    assert min_path_sum(root) == 15  # Minimum path: 10 -> 5 -> 2
+    assert min_path_sum(root) == 17  # Minimum path: 10 -> 5 -> 2
 
 def test_min_path_sum_single_node():
     """Test tree with only a root node"""
@@ -58,7 +58,7 @@ def test_min_path_sum_complex_tree():
     root.left.right.left = TreeNode(10)
     root.left.right.right = TreeNode(14)
     
-    assert min_path_sum(root) == 38  # 20 -> 8 -> 4
+    assert min_path_sum(root) == 32  # 20 -> 8 -> 4 (not 38)
 
 def test_min_path_sum_invalid_input():
     """Test invalid input raises TypeError"""
