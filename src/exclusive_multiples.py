@@ -20,10 +20,10 @@ def filter_exclusive_multiples(numbers):
         raise TypeError("All elements must be integers")
     
     # Filter numbers that are multiples of 3 or 5, but not both
-    exclusive_multiples = [
-        num for num in numbers 
-        if (num % 3 == 0) != (num % 5 == 0)
-    ]
+    def is_exclusive_multiple(num):
+        return (num % 3 == 0) != (num % 5 == 0)
     
-    # Return sorted list in ascending order
+    exclusive_multiples = list(filter(is_exclusive_multiple, numbers))
+    
+    # Return sorted list based on absolute value
     return sorted(exclusive_multiples, key=abs)
