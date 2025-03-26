@@ -26,4 +26,4 @@ def filter_exclusive_multiples(numbers):
     exclusive_multiples = list(filter(is_exclusive_multiple, numbers))
     
     # Return sorted list based on absolute value
-    return sorted(exclusive_multiples, key=abs)
+    return sorted(exclusive_multiples, key=abs)[:7]
