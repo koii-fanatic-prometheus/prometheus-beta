@@ -28,6 +28,10 @@ def find_missing_numbers(arr):
     min_val = min(arr)
     max_val = max(arr)
     
+    # If only one number, return next 5 consecutive numbers
+    if len(arr) == 1:
+        return list(range(max_val + 1, max_val + 6))
+    
     # Create a set of the input array for O(1) lookup
     arr_set = set(arr)
     
