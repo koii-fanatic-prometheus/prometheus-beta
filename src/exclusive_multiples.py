@@ -25,5 +25,5 @@ def filter_exclusive_multiples(numbers):
         if (num % 3 == 0) != (num % 5 == 0)
     ]
     
-    # Return sorted list
-    return sorted(exclusive_multiples)
+    # Return sorted list in ascending order
+    return sorted(exclusive_multiples, key=abs)
