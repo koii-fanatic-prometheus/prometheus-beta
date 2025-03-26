@@ -29,34 +29,25 @@ def find_local_maxima(arr):
     
     local_maxima = []
     
+    # Comparison function that falls back to string representation
+    def safe_compare(a, b):
+        try:
+            return a > b
+        except TypeError:
+            return str(a) > str(b)
+    
     # Check first element
-    try:
-        if arr[0] > arr[1]:
-            local_maxima.append(0)
-    except TypeError:
-        # If comparison fails, try comparing their string representations
-        if str(arr[0]) > str(arr[1]):
-            local_maxima.append(0)
+    if safe_compare(arr[0], arr[1]):
+        local_maxima.append(0)
     
     # Check middle elements
     for i in range(1, len(arr) - 1):
-        try:
-            # Check if current element is strictly greater than both neighbors
-            if arr[i] > arr[i-1] and arr[i] > arr[i+1]:
-                local_maxima.append(i)
-        except TypeError:
-            # If direct comparison fails, use string representation
-            if (str(arr[i]) > str(arr[i-1]) and 
-                str(arr[i]) > str(arr[i+1])):
-                local_maxima.append(i)
+        if (safe_compare(arr[i], arr[i-1]) and 
+            safe_compare(arr[i], arr[i+1])):
+            local_maxima.append(i)
     
     # Check last element
-    try:
-        if arr[-1] > arr[-2]:
-            local_maxima.append(len(arr) - 1)
-    except TypeError:
-        # If comparison fails, try comparing string representations
-        if str(arr[-1]) > str(arr[-2]):
-            local_maxima.append(len(arr) - 1)
+    if safe_compare(arr[-1], arr[-2]):
+        local_maxima.append(len(arr) - 1)
     
     return local_maxima
