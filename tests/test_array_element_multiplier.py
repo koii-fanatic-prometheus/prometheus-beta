@@ -1,5 +1,6 @@
 import pytest
 from src.array_element_multiplier import multiply_array_elements
+from typing import Any
 
 def test_multiply_numeric_arrays():
     """Test multiplication of numeric arrays"""
@@ -30,8 +31,13 @@ def test_unequal_length_arrays():
 
 def test_unmultiplicable_types():
     """Test that an error is raised for types that cannot be multiplied"""
-    with pytest.raises(TypeError):
-        multiply_array_elements([1, 2], [1, "string"])
+    # Test with a custom class that doesn't support multiplication
+    class UnmultiplicableClass:
+        def __init__(self, val: Any):
+            self.val = val
+    
+    with pytest.raises(TypeError, match="Cannot multiply elements"):
+        multiply_array_elements([1, UnmultiplicableClass(2)], [2, 3])
 
 def test_none_values():
     """Test handling of None values"""
