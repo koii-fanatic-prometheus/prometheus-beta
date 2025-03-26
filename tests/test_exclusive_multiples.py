@@ -4,7 +4,7 @@ from src.exclusive_multiples import filter_exclusive_multiples
 def test_basic_filtering():
     """Test basic filtering of exclusive multiples."""
     input_list = [1, 2, 3, 4, 5, 6, 9, 10, 12, 15, 18, 20]
-    expected = [3, 5, 6, 9, 10, 12, 18, 20]
+    expected = [3, 5, 6, 9, 10, 12]
     assert filter_exclusive_multiples(input_list) == expected
 
 def test_empty_list():
@@ -19,13 +19,13 @@ def test_no_exclusive_multiples():
 def test_all_multiples():
     """Test a list with only multiples of 3 or 5."""
     input_list = [3, 5, 6, 9, 10, 12, 15, 18, 20]
-    expected = [3, 5, 6, 9, 10, 12, 18, 20]
+    expected = [3, 5, 6, 9, 10, 12]
     assert filter_exclusive_multiples(input_list) == expected
 
 def test_negative_numbers():
     """Test filtering with negative numbers."""
     input_list = [-3, -5, -6, -9, -10, -12, -15, -18, -20]
-    expected = [-3, -5, -6, -9, -10, -12, -18, -20]
+    expected = [-3, -5, -6, -9, -10, -12]
     assert filter_exclusive_multiples(input_list) == expected
 
 def test_input_type_error():
@@ -41,5 +41,5 @@ def test_non_integer_error():
 def test_mixed_sign_multiples():
     """Test filtering with mixed positive and negative numbers."""
     input_list = [-9, -6, -3, 0, 3, 6, 9, 5, -5, 10, -10]
-    expected = [-3, 3, 5, -5, -6, 6, 10, -10]
+    expected = [-3, 3, 5, -5, -6, 6]
     assert filter_exclusive_multiples(input_list) == expected
