@@ -19,8 +19,12 @@ def multiply_array_elements(arr1: List[Any], arr2: List[Any]) -> List[Any]:
     if len(arr1) != len(arr2):
         raise ValueError("Input arrays must have the same length")
     
+    # Validate that all elements are multiplicable
+    for x, y in zip(arr1, arr2):
+        try:
+            x * y
+        except TypeError:
+            raise TypeError(f"Cannot multiply elements of types {type(x)} and {type(y)}")
+    
     # Multiply corresponding elements
-    try:
-        return [x * y for x, y in zip(arr1, arr2)]
-    except TypeError as e:
-        raise TypeError(f"Cannot multiply elements: {e}")
+    return [x * y for x, y in zip(arr1, arr2)]
