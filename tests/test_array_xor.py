@@ -30,5 +30,5 @@ def test_array_xor_error_handling():
 
 def test_array_xor_large_numbers():
     """Test XOR with larger numbers."""
-    assert find_array_xor([1024, 2048, 4096]) == 5120  # 1024 ^ 2048 ^ 4096 = 5120
+    assert find_array_xor([1024, 2048, 4096]) == 7168  # 1024 ^ 2048 ^ 4096 = 7168
     assert find_array_xor([10**6, 10**6 + 1, 10**6 + 2]) == 3  # Large numbers
