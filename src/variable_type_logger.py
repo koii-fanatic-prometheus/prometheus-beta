@@ -18,11 +18,21 @@ def log_variable_type(variable):
     # Get the type of the variable as a string
     var_type = type(variable).__name__
     
-    # Configure logging if not already configured
-    logging.basicConfig(level=logging.INFO, 
-                        format='%(asctime)s - %(levelname)s - %(message)s')
+    # Configure logging
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    
+    # Clear any existing handlers to prevent duplicate logging
+    logger.handlers.clear()
+    
+    # Create a handler that can be captured by tests
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
     
     # Log the type of the variable
-    logging.info(f"Variable type: {var_type}")
+    logger.info(f"Variable type: {var_type}")
     
     return var_type
