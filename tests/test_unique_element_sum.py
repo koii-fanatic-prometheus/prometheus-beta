@@ -16,7 +16,7 @@ def test_sum_unique_elements_edge_cases():
     """Test edge cases"""
     assert sum_unique_elements([0]) == 0
     assert sum_unique_elements([-1, -1, 2, 2]) == 0
-    assert sum_unique_elements([1, -1, 2, -2, 3]) == 0  # No unique elements
+    assert sum_unique_elements([1, -1, 2, -2, 3]) == 3  # Only 3 appears once
 
 def test_sum_unique_elements_large_numbers():
     """Test with large numbers"""
