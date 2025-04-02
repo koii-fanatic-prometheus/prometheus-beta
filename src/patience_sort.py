@@ -27,35 +27,42 @@ def patience_sort(arr: List[T]) -> List[T]:
     if len(arr) <= 1:
         return arr.copy()
     
-    # Create piles (stacks) to simulate patience sorting
+    # Ensure all elements are of the same type
+    if not all(isinstance(x, type(arr[0])) for x in arr):
+        raise TypeError("All elements must be of the same type")
+    
+    # Create piles (stacks) in Patience Sort
     piles = []
     
     for item in arr:
-        # Try to place the item on an existing pile
-        placed = False
+        # Find the correct pile to place the item
+        found_pile = False
         for pile in piles:
-            # If the pile is empty or the top of the pile is greater than or equal to the item
-            if not pile or (isinstance(pile[-1], type(item)) and item <= pile[-1]):
+            # Attempt to place on first pile where the top item is >= current item
+            if not pile or item <= pile[-1]:
                 pile.append(item)
-                placed = True
+                found_pile = True
                 break
         
-        # If no suitable pile is found, create a new pile
-        if not placed:
+        # If no existing pile works, create a new pile
+        if not found_pile:
             piles.append([item])
     
-    # Merge piles using a min-heap approach
-    heap = [(pile[0], i, pile) for i, pile in enumerate(piles)]
+    # Merge piles using a min-heap
+    result = []
+    heap = [(pile[0], i) for i, pile in enumerate(piles)]
     heapq.heapify(heap)
     
-    result = []
+    # Track the piles
     while heap:
-        val, pile_index, pile = heapq.heappop(heap)
+        val, pile_index = heapq.heappop(heap)
         result.append(val)
-        pile.pop(0)
         
-        # If the pile is not empty, push its new top element to the heap
-        if pile:
-            heapq.heappush(heap, (pile[0], pile_index, pile))
+        # Remove the top item from its pile
+        piles[pile_index].pop(0)
+        
+        # If the pile is not empty, add its new top to the heap
+        if piles[pile_index]:
+            heapq.heappush(heap, (piles[pile_index][0], pile_index))
     
     return result
