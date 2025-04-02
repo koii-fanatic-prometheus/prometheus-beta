@@ -99,27 +99,36 @@ def lzvn_decompress(compressed_data):
     current_pos = 0
     
     while current_pos < len(compressed_data):
-        # Check if we have a match or literal
-        if current_pos + 2 < len(compressed_data):
-            # Potential match: low byte of offset, high 4 bits of offset, length
-            offset_low = compressed_data[current_pos]
-            offset_high = compressed_data[current_pos + 1] & 0x0F
-            offset = offset_low | (offset_high << 8)
-            length = compressed_data[current_pos + 2]
-            
-            # If offset and length suggest a match, decode it
-            if offset > 0 and length > 0:
-                # Copy match from previous data
-                match_start = len(decompressed) - offset
-                for i in range(length):
-                    decompressed.append(decompressed[match_start + i])
-                current_pos += 3
-            else:
-                # Literal byte
+        # Check for literals first
+        if current_pos + 2 >= len(compressed_data):
+            # Remaining bytes are literals
+            decompressed.append(compressed_data[current_pos])
+            current_pos += 1
+            continue
+        
+        # Potential match: low byte of offset, high 4 bits of offset, length
+        offset_low = compressed_data[current_pos]
+        offset_high = compressed_data[current_pos + 1] & 0x0F
+        offset = offset_low | (offset_high << 8)
+        length = compressed_data[current_pos + 2]
+        
+        # If offset and length suggest a match, decode it
+        if offset > 0 and length > 0:
+            # Validate match parameters
+            if offset > len(decompressed):
                 decompressed.append(compressed_data[current_pos])
                 current_pos += 1
+                continue
+            
+            # Copy match from previous data
+            match_start = len(decompressed) - offset
+            for i in range(length):
+                match_byte = decompressed[match_start + i]
+                decompressed.append(match_byte)
+            
+            current_pos += 3
         else:
-            # Remaining bytes are literals
+            # Literal byte
             decompressed.append(compressed_data[current_pos])
             current_pos += 1
     
