@@ -40,4 +40,4 @@ def sum_unique_elements(arr):
         element_counts[num] = element_counts.get(num, 0) + 1
     
     # Sum unique elements (those appearing only once)
-    return 0  # No unique elements found
+    return sum(num for num, count in element_counts.items() if count == 1)
