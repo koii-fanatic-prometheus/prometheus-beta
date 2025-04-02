@@ -36,33 +36,41 @@ def flash_sort(arr):
     
     # Number of classes/buckets
     n = len(arr)
-    m = int(0.42 * n)
+    m = max(int(0.42 * n), 2)  # Ensure at least 2 classes
     
-    # Compute weights (class sizes)
-    weights = [0] * m
-    
-    # Compute class (bucket) of each element
+    # Compute class distribution
     def get_class(x):
         return int(((x - min_val) / (max_val - min_val)) * (m - 1))
     
-    # Counting elements in each class
+    # Initialize class weights
+    weights = [0] * m
+    
+    # Count elements in each class
     for x in arr:
         j = get_class(x)
         weights[j] += 1
     
-    # Compute cumulative class weights
+    # Compute cumulative weights
     for j in range(1, m):
         weights[j] += weights[j-1]
     
-    # Flash Sort - Move elements to their correct class
-    output = [None] * n
-    for i in range(n - 1, -1, -1):
-        j = get_class(arr[i])
-        weights[j] -= 1
-        output[weights[j]] = arr[i]
+    # Buckets to hold sorted elements
+    buckets = [[] for _ in range(m)]
     
-    # Move back to original array
-    for i in range(n):
-        arr[i] = output[i]
+    # Distribute elements into buckets
+    for x in arr:
+        j = get_class(x)
+        buckets[j].append(x)
+    
+    # Sort each bucket
+    for j in range(m):
+        buckets[j].sort()
+    
+    # Reconstruct the array
+    k = 0
+    for bucket in buckets:
+        for x in bucket:
+            arr[k] = x
+            k += 1
     
     return arr
