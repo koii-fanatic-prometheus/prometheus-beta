@@ -8,7 +8,7 @@ def test_basic_substring_reversal():
 
 def test_substring_in_middle():
     """Test reversing a substring in the middle of the string"""
-    assert reverse_substring("python programming", 7, 12) == "python gormmarp"
+    assert reverse_substring("python programming", 7, 12) == "python rgorpamming"
 
 def test_single_character_substring():
     """Test reversing a single character substring"""
