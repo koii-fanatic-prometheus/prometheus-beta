@@ -66,10 +66,10 @@ def flash_sort(arr):
     for j in range(m):
         buckets[j].sort()
     
-    # Reconstruct the array
+    # Reconstruct the array in-place
     k = 0
-    for bucket in buckets:
-        for x in bucket:
+    for j in range(m):
+        for x in buckets[j]:
             arr[k] = x
             k += 1
     
