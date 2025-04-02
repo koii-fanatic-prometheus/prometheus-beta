@@ -47,12 +47,9 @@ def lzvn_compress(data):
             
             # Check how long the match continues
             while (current_pos + match_length < len(data) and 
-                   data[current_pos - offset + match_length - 1] == data[current_pos + match_length]):
+                   match_length < 255 and
+                   data[current_pos - offset + match_length] == data[current_pos + match_length]):
                 match_length += 1
-                
-                # Prevent overrunning the data
-                if match_length >= 255 or current_pos + match_length >= len(data):
-                    break
             
             # Update best match if this is longer
             if match_length > best_length:
@@ -62,9 +59,9 @@ def lzvn_compress(data):
         # Encode the match or literal
         if best_length > 2:
             # Encode match (offset, length)
+            compressed.append(data[current_pos])  # First byte of match
             compressed.append(best_offset & 0xFF)  # Low byte of offset
-            compressed.append((best_offset >> 8) & 0x0F)  # High 4 bits of offset
-            compressed.append(best_length)  # Length of match
+            compressed.append(((best_offset >> 8) & 0x0F) | (best_length << 4))  # High 4 bits of offset and length
             current_pos += best_length
         else:
             # Encode literal byte
@@ -99,25 +96,32 @@ def lzvn_decompress(compressed_data):
     current_pos = 0
     
     while current_pos < len(compressed_data):
-        # Check for literals first
+        # Check for remaining literals
         if current_pos + 2 >= len(compressed_data):
-            # Remaining bytes are literals
             decompressed.append(compressed_data[current_pos])
             current_pos += 1
             continue
         
-        # Potential match: low byte of offset, high 4 bits of offset, length
-        offset_low = compressed_data[current_pos]
-        offset_high = compressed_data[current_pos + 1] & 0x0F
-        offset = offset_low | (offset_high << 8)
-        length = compressed_data[current_pos + 2]
+        # Read first byte (literal)
+        literal = compressed_data[current_pos]
+        offset_low = compressed_data[current_pos + 1]
+        combined = compressed_data[current_pos + 2]
         
-        # If offset and length suggest a match, decode it
+        # Extract offset high bits and length
+        offset_high = combined & 0x0F
+        length = (combined >> 4) & 0x0F
+        
+        # Reconstruct full offset
+        offset = offset_low | (offset_high << 8)
+        
+        # Process literal or match
         if offset > 0 and length > 0:
+            # Match encoding
+            decompressed.append(literal)
+            
             # Validate match parameters
             if offset > len(decompressed):
-                decompressed.append(compressed_data[current_pos])
-                current_pos += 1
+                current_pos += 3
                 continue
             
             # Copy match from previous data
@@ -129,7 +133,7 @@ def lzvn_decompress(compressed_data):
             current_pos += 3
         else:
             # Literal byte
-            decompressed.append(compressed_data[current_pos])
+            decompressed.append(literal)
             current_pos += 1
     
     return decompressed
