@@ -1,5 +1,5 @@
 from typing import List, TypeVar, Any
-from functools import total_ordering
+import heapq
 
 T = TypeVar('T')
 
@@ -18,7 +18,6 @@ def patience_sort(arr: List[T]) -> List[T]:
     
     Raises:
         TypeError: If the input is not a list
-        ValueError: If the list contains elements that cannot be compared
     """
     # Validate input
     if not isinstance(arr, list):
@@ -35,8 +34,8 @@ def patience_sort(arr: List[T]) -> List[T]:
         # Try to place the item on an existing pile
         placed = False
         for pile in piles:
-            # If the top of the pile is greater than the current item
-            if not pile or item <= pile[-1]:
+            # If the pile is empty or the top of the pile is greater than or equal to the item
+            if not pile or (isinstance(pile[-1], type(item)) and item <= pile[-1]):
                 pile.append(item)
                 placed = True
                 break
@@ -46,19 +45,17 @@ def patience_sort(arr: List[T]) -> List[T]:
             piles.append([item])
     
     # Merge piles using a min-heap approach
+    heap = [(pile[0], i, pile) for i, pile in enumerate(piles)]
+    heapq.heapify(heap)
+    
     result = []
-    while piles:
-        # Find the pile with the smallest top card
-        min_pile_index = 0
-        for i in range(1, len(piles)):
-            if piles[i][0] < piles[min_pile_index][0]:
-                min_pile_index = i
+    while heap:
+        val, pile_index, pile = heapq.heappop(heap)
+        result.append(val)
+        pile.pop(0)
         
-        # Add the smallest item to the result
-        result.append(piles[min_pile_index].pop(0))
-        
-        # Remove empty piles
-        if not piles[min_pile_index]:
-            piles.pop(min_pile_index)
+        # If the pile is not empty, push its new top element to the heap
+        if pile:
+            heapq.heappush(heap, (pile[0], pile_index, pile))
     
     return result
