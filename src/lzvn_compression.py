@@ -47,7 +47,7 @@ def lzvn_compress(data):
             
             # Check how long the match continues
             while (current_pos + match_length < len(data) and 
-                   match_length < 255 and
+                   match_length < 15 and  # Limit length to 4 bits
                    data[current_pos - offset + match_length] == data[current_pos + match_length]):
                 match_length += 1
             
@@ -60,8 +60,14 @@ def lzvn_compress(data):
         if best_length > 2:
             # Encode match (offset, length)
             compressed.append(data[current_pos])  # First byte of match
-            compressed.append(best_offset & 0xFF)  # Low byte of offset
-            compressed.append(((best_offset >> 8) & 0x0F) | (best_length << 4))  # High 4 bits of offset and length
+            
+            # Low 8 bits of offset
+            compressed.append(best_offset & 0xFF)
+            
+            # Combine high 4 bits of offset with length
+            control_byte = ((best_offset >> 8) & 0x0F) | (best_length << 4)
+            compressed.append(control_byte & 0xFF)
+            
             current_pos += best_length
         else:
             # Encode literal byte
@@ -102,38 +108,37 @@ def lzvn_decompress(compressed_data):
             current_pos += 1
             continue
         
-        # Read first byte (literal)
+        # First byte is the literal or first byte of match
         literal = compressed_data[current_pos]
-        offset_low = compressed_data[current_pos + 1]
-        combined = compressed_data[current_pos + 2]
+        decompressed.append(literal)
         
-        # Extract offset high bits and length
-        offset_high = combined & 0x0F
-        length = (combined >> 4) & 0x0F
-        
-        # Reconstruct full offset
-        offset = offset_low | (offset_high << 8)
-        
-        # Process literal or match
-        if offset > 0 and length > 0:
-            # Match encoding
-            decompressed.append(literal)
+        # Handle potential match
+        if current_pos + 2 < len(compressed_data):
+            # Read offset low byte and control byte
+            offset_low = compressed_data[current_pos + 1]
+            control_byte = compressed_data[current_pos + 2]
             
-            # Validate match parameters
-            if offset > len(decompressed):
+            # Extract high offset bits and length
+            offset_high = control_byte & 0x0F
+            length = (control_byte >> 4) & 0x0F
+            
+            # Reconstruct full offset
+            offset = offset_low | (offset_high << 8)
+            
+            # If a match is detected
+            if offset > 0 and length > 0:
+                # Validate match parameters
+                if offset <= len(decompressed):
+                    # Copy match from previous data
+                    match_start = len(decompressed) - offset
+                    for i in range(length):
+                        match_byte = decompressed[match_start + i]
+                        decompressed.append(match_byte)
+                
                 current_pos += 3
-                continue
-            
-            # Copy match from previous data
-            match_start = len(decompressed) - offset
-            for i in range(length):
-                match_byte = decompressed[match_start + i]
-                decompressed.append(match_byte)
-            
-            current_pos += 3
+            else:
+                current_pos += 1
         else:
-            # Literal byte
-            decompressed.append(literal)
             current_pos += 1
     
     return decompressed
