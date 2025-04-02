@@ -2,11 +2,13 @@ def sum_unique_elements(arr):
     """
     Calculate the sum of unique elements in the given array.
     
+    An element is considered unique if it appears exactly once in the input array.
+    
     Args:
         arr (list): A list of integers to process.
     
     Returns:
-        int: Sum of unique elements in the array.
+        int: Sum of elements that appear only once in the array.
     
     Raises:
         TypeError: If input contains non-integer elements.
@@ -18,7 +20,7 @@ def sum_unique_elements(arr):
         >>> sum_unique_elements([1, 2, 3, 2])
         4
         >>> sum_unique_elements([1, 1, 1, 1])
-        1
+        0
         >>> sum_unique_elements([])
         0
     """
