@@ -23,7 +23,7 @@ def test_various_scenarios():
     
     # Multiple possible subsequences
     assert longest_palindrome_subsequence("aabaa") == 5
-    assert longest_palindrome_subsequence("forgeeksskeegfor") == 9
+    assert longest_palindrome_subsequence("forgeeksskeegfor") == 12
 
 def test_mixed_characters():
     # Mixed case
@@ -35,4 +35,4 @@ def test_mixed_characters():
 def test_long_input():
     # Longer input to test performance and correctness
     long_input = "a" * 1000 + "b" * 1000
-    assert longest_palindrome_subsequence(long_input) == 2000
+    assert longest_palindrome_subsequence(long_input) == 1000
