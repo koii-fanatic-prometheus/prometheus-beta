@@ -39,11 +39,13 @@ def test_patience_sort_strings():
     expected = sorted(input_list)
     assert patience_sort(input_list) == expected
 
-def test_patience_sort_mixed_types():
-    """Test sorting with mixed comparable types"""
-    input_list = [5, 2, 'a', 'b', 1, 'c']
-    expected = sorted(input_list)
-    assert patience_sort(input_list) == expected
+def test_patience_sort_homogeneous_list():
+    """Test sorting homogeneous list of mixed types"""
+    input_list_int = [5, 2, 8, 12, 1, 6]
+    assert patience_sort(input_list_int) == sorted(input_list_int)
+    
+    input_list_str = ['z', 'a', 'm', 'b']
+    assert patience_sort(input_list_str) == sorted(input_list_str)
 
 def test_patience_sort_invalid_input():
     """Test invalid input type"""
