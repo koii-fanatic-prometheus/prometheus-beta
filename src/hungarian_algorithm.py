@@ -36,48 +36,49 @@ def hungarian_algorithm(cost_matrix):
     for j in range(n):
         matrix[:, j] -= matrix[:, j].min()
     
-    # Step 3: Cover zeros with minimum number of lines
-    def cover_zeros(matrix):
-        # Create boolean arrays to track covered rows and columns
-        covered_rows = [False] * n
-        covered_cols = [False] * n
+    def find_minimum_lines(matrix):
+        """Find the minimum number of lines to cover all zeros"""
+        # Use a greedy approach to mark rows and columns
+        n = matrix.shape[0]
+        row_covered = [False] * n
+        col_covered = [False] * n
         
-        # Count lines needed to cover all zeros
-        lines = 0
-        
-        # Find independent zeros
+        zero_lines = 0
         assignments = [-1] * n
+        
+        # Find independent zero assignments
         for i in range(n):
             for j in range(n):
-                if matrix[i, j] == 0 and not covered_rows[i] and not covered_cols[j]:
+                if matrix[i, j] == 0 and not row_covered[i] and not col_covered[j]:
                     assignments[i] = j
-                    covered_rows[i] = True
-                    covered_cols[j] = True
-                    lines += 1
+                    row_covered[i] = True
+                    col_covered[j] = True
+                    zero_lines += 1
         
-        return assignments, lines
+        return assignments, zero_lines
     
-    # Step 4: Adjust matrix if needed
-    assignments, lines = cover_zeros(matrix)
+    # Initial attempt to find optimal assignments
+    assignments, lines = find_minimum_lines(matrix)
     
+    # If not all tasks are assigned, adjust the matrix
     while lines < n:
         # Find the smallest uncovered element
         min_uncovered = float('inf')
-        for i in range(n):
-            for j in range(n):
-                if not (covered_rows[i] or covered_cols[j]):
+        for i in range(matrix.shape[0]):
+            for j in range(matrix.shape[1]):
+                if not (row_covered[i] or col_covered[j]):
                     min_uncovered = min(min_uncovered, matrix[i, j])
         
-        # Adjust matrix
-        for i in range(n):
-            for j in range(n):
-                if covered_rows[i]:
+        # Modify matrix
+        for i in range(matrix.shape[0]):
+            for j in range(matrix.shape[1]):
+                if row_covered[i]:
                     matrix[i, j] += min_uncovered
-                if not covered_cols[j]:
+                if not col_covered[j]:
                     matrix[i, j] -= min_uncovered
         
-        # Recheck assignments
-        assignments, lines = cover_zeros(matrix)
+        # Reattempt finding assignments
+        assignments, lines = find_minimum_lines(matrix)
     
     # Calculate total cost of the optimal assignment
     total_cost = sum(cost_matrix[i][assignments[i]] for i in range(n))
