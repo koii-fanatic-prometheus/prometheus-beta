@@ -21,6 +21,12 @@ def reverse_substring(s: str, start: int, end: int) -> str:
     if not isinstance(start, int) or not isinstance(end, int):
         raise TypeError("Start and end indices must be integers")
     
+    # Special case for empty string
+    if len(s) == 0:
+        if start == 0 and end == 0:
+            return s
+        raise ValueError("Invalid substring indices")
+    
     # Bounds checking
     if start < 0 or end > len(s) or start >= end:
         raise ValueError("Invalid substring indices")
