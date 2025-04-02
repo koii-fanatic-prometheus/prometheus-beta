@@ -1,17 +1,13 @@
 """
-LZVN Compression Algorithm Implementation
+Simple LZ-like Compression Algorithm Implementation
 
-This module provides a basic implementation of the LZVN (Lempel-Ziv Variable-length Number) compression algorithm.
-LZVN is a variant of LZ compression used in some compression scenarios.
-
-Key characteristics:
-- Variable-length encoding
-- Reduces redundancy in data by replacing repeated sequences with references
+This module provides a basic implementation of a simple compression algorithm
+that uses repeated sequence matching for compression.
 """
 
 def lzvn_compress(data):
     """
-    Compress input data using LZVN compression algorithm.
+    Compress input data using a simple LZ-like compression algorithm.
     
     Args:
         data (bytes or bytearray): Input data to be compressed
@@ -30,47 +26,42 @@ def lzvn_compress(data):
     if len(data) == 0:
         raise ValueError("Input data cannot be empty")
     
-    # Initialize compression variables
     compressed = bytearray()
-    window_size = 4096  # Standard window size for LZ-style compression
+    window_size = 4096
     current_pos = 0
     
     while current_pos < len(data):
-        # Look for the longest match in the previous window
+        # Look for repeated sequence
         best_length = 0
         best_offset = 0
         
-        # Search back through the window for the longest match
+        # Search back in the window
         search_start = max(0, current_pos - window_size)
         for offset in range(current_pos - search_start):
             match_length = 0
             
-            # Check how long the match continues
+            # Check match length
             while (current_pos + match_length < len(data) and 
-                   match_length < 15 and  # Limit length to 4 bits
-                   data[current_pos - offset + match_length] == data[current_pos + match_length]):
+                   data[current_pos - offset + match_length] == data[current_pos + match_length] and
+                   match_length < 15):  # Limit match length to 4 bits
                 match_length += 1
             
-            # Update best match if this is longer
+            # Update best match
             if match_length > best_length:
                 best_length = match_length
                 best_offset = offset + 1
         
-        # Encode the match or literal
+        # Encode data
         if best_length > 2:
-            # Encode match (offset, length)
-            compressed.append(data[current_pos])  # First byte of match
+            # Mark as match
+            compressed.append(0xFF)  # Match marker
+            compressed.append(best_offset & 0xFF)  # Offset low byte
+            compressed.append(((best_offset >> 8) & 0x0F) | (best_length << 4))  # Offset high + length
             
-            # Low 8 bits of offset
-            compressed.append(best_offset & 0xFF)
-            
-            # Combine high 4 bits of offset with length
-            control_byte = ((best_offset >> 8) & 0x0F) | (best_length << 4)
-            compressed.append(control_byte & 0xFF)
-            
+            # Move past match
             current_pos += best_length
         else:
-            # Encode literal byte
+            # Literal byte
             compressed.append(data[current_pos])
             current_pos += 1
     
@@ -78,7 +69,7 @@ def lzvn_compress(data):
 
 def lzvn_decompress(compressed_data):
     """
-    Decompress data that was compressed using LZVN algorithm.
+    Decompress data compressed by the simple LZ-like algorithm.
     
     Args:
         compressed_data (bytes or bytearray): Compressed input data
@@ -97,48 +88,35 @@ def lzvn_decompress(compressed_data):
     if len(compressed_data) == 0:
         raise ValueError("Input data cannot be empty")
     
-    # Initialize decompression variables
     decompressed = bytearray()
     current_pos = 0
     
     while current_pos < len(compressed_data):
-        # Check for remaining literals
-        if current_pos + 2 >= len(compressed_data):
-            decompressed.append(compressed_data[current_pos])
-            current_pos += 1
-            continue
-        
-        # First byte is the literal or first byte of match
-        literal = compressed_data[current_pos]
-        decompressed.append(literal)
-        
-        # Handle potential match
-        if current_pos + 2 < len(compressed_data):
-            # Read offset low byte and control byte
+        # Check for match marker
+        if (compressed_data[current_pos] == 0xFF and 
+            current_pos + 2 < len(compressed_data)):
+            # Match detected
             offset_low = compressed_data[current_pos + 1]
             control_byte = compressed_data[current_pos + 2]
             
-            # Extract high offset bits and length
+            # Extract offset and length
             offset_high = control_byte & 0x0F
             length = (control_byte >> 4) & 0x0F
             
             # Reconstruct full offset
             offset = offset_low | (offset_high << 8)
             
-            # If a match is detected
-            if offset > 0 and length > 0:
-                # Validate match parameters
-                if offset <= len(decompressed):
-                    # Copy match from previous data
-                    match_start = len(decompressed) - offset
-                    for i in range(length):
-                        match_byte = decompressed[match_start + i]
-                        decompressed.append(match_byte)
-                
-                current_pos += 3
-            else:
-                current_pos += 1
+            # Validate offset
+            if offset <= len(decompressed):
+                # Copy matched sequence
+                match_start = len(decompressed) - offset
+                for i in range(length):
+                    decompressed.append(decompressed[match_start + i])
+            
+            current_pos += 3
         else:
+            # Literal byte
+            decompressed.append(compressed_data[current_pos])
             current_pos += 1
     
     return decompressed
