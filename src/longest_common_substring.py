@@ -33,6 +33,7 @@ def longest_common_substring(str1, str2):
     # Fill the dynamic programming table
     for i in range(1, m + 1):
         for j in range(1, n + 1):
+            # Case-sensitive exact match
             if str1[i-1] == str2[j-1]:
                 dp[i][j] = dp[i-1][j-1] + 1
                 
@@ -42,4 +43,14 @@ def longest_common_substring(str1, str2):
                     end_position = i - 1
     
     # Extract and return the longest common substring
-    return str1[end_position - max_length + 1:end_position + 1] if max_length > 0 else ""
+    if max_length == 0:
+        # No common substring found
+        return ""
+    
+    substring = str1[end_position - max_length + 1:end_position + 1]
+    
+    # Ensure the substring is long enough and actually appears in both strings
+    if len(substring) > 1 and substring in str1 and substring in str2:
+        return substring
+    
+    return ""
