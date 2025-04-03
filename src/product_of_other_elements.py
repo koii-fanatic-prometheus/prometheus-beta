@@ -3,7 +3,7 @@ def product_of_other_elements(nums):
     Returns a list where each element is the product of all other elements except itself.
     
     Args:
-        nums (list): Input list of integers
+        nums (list): Input list of integers or floats
     
     Returns:
         list: A list where each element is the product of all other elements except the element at that index
@@ -16,23 +16,27 @@ def product_of_other_elements(nums):
     if not isinstance(nums, list):
         raise ValueError("Input must be a list")
     
+    # Handle empty list
+    if len(nums) == 0:
+        return []
+    
     # Check if all elements are numeric
     if not all(isinstance(x, (int, float)) for x in nums):
         raise TypeError("All list elements must be numeric")
     
-    # Handle empty list or single-element list
-    if len(nums) <= 1:
-        return [1] * len(nums)
+    # Handle single-element list
+    if len(nums) == 1:
+        return [1]
     
     # Calculate total product first
     total_product = 1
     for num in nums:
         total_product *= num
     
-    # Create result list by dividing total product by each element
+    # Create result list 
     result = []
     for num in nums:
-        # Avoid division by zero
+        # Avoid division by zero 
         if num == 0:
             # If this is the only zero, product will be total product of non-zero elements
             # If multiple zeros, product will be zero
@@ -47,6 +51,6 @@ def product_of_other_elements(nums):
                         non_zero_product *= x
                 result.append(non_zero_product)
         else:
-            result.append(total_product // num)
+            result.append(total_product / num)
     
     return result
