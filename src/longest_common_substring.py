@@ -21,21 +21,24 @@ def longest_common_substring(str1, str2):
     if not str1 or not str2:
         return ""
 
-    # Find all common substrings with at least 2 characters
-    common_substrings = []
+    # Find the best common substring
+    best_substring = ""
     for i in range(len(str1)):
         for j in range(len(str2)):
             # Check substring starting at these positions
             k = 0
+            current_substring = ""
             while (i + k < len(str1) and 
                    j + k < len(str2) and 
                    str1[i + k] == str2[j + k]):
+                current_substring += str1[i + k]
                 k += 1
             
-            # Add substring ONLY if it's at least 2 characters long
-            substring = str1[i:i+k]
-            if len(substring) > 1 and substring in str1 and substring in str2:
-                common_substrings.append(substring)
+            # Update best substring if current is longer and meets requirements
+            if (len(current_substring) > len(best_substring) and 
+                len(current_substring) > 1 and 
+                str1.count(current_substring) > 0 and 
+                str2.count(current_substring) > 0):
+                best_substring = current_substring
 
-    # Return the longest common substring, or empty string if none found
-    return max(common_substrings, key=len, default="")
+    return best_substring
