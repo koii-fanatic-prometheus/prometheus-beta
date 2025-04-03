@@ -38,18 +38,22 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     
     # Build the dp table
+    common_lcs = False
     for i in range(1, m + 1):
         for j in range(1, n + 1):
             # Strictly case-sensitive comparison
             if str1[i-1] == str2[j-1]:
                 # If characters match, add 1 to previous diagonal value
                 dp[i][j] = dp[i-1][j-1] + 1
+                # Check if the match is valid (not just similar Unicode)
+                if str1[i-1] == str2[j-1]:
+                    common_lcs = True
             else:
                 # Take the maximum of left and top values
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
     
-    # Check if there's actually a common subsequence
-    if dp[m][n] == 0:
+    # If no genuine common characters, return empty string
+    if not common_lcs:
         return ""
     
     # Reconstruct the LCS
@@ -57,7 +61,7 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     i, j = m, n
     while i > 0 and j > 0:
         if str1[i-1] == str2[j-1]:
-            # If characters match, add to LCS and move diagonally
+            # If characters match exactly
             lcs.append(str1[i-1])
             i -= 1
             j -= 1
