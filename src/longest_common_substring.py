@@ -21,7 +21,7 @@ def longest_common_substring(str1, str2):
     if not str1 or not str2:
         return ""
 
-    # Find all common substrings
+    # Find all common substrings with at least 2 characters
     common_substrings = []
     for i in range(len(str1)):
         for j in range(len(str2)):
@@ -32,9 +32,10 @@ def longest_common_substring(str1, str2):
                    str1[i + k] == str2[j + k]):
                 k += 1
             
-            # If a substring was found, add it
-            if k > 0:
-                common_substrings.append(str1[i:i+k])
+            # Add substring ONLY if it's at least 2 characters long
+            substring = str1[i:i+k]
+            if len(substring) > 1 and substring in str1 and substring in str2:
+                common_substrings.append(substring)
 
     # Return the longest common substring, or empty string if none found
     return max(common_substrings, key=len, default="")
