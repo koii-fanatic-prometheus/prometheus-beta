@@ -29,6 +29,8 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not isinstance(str1, str) or not isinstance(str2, str):
         raise TypeError("Inputs must be strings")
     
+    # Remove any automatic case-folding
+    # Use separate case-sensitive comparison
     # Handle empty string cases
     if not str1 or not str2:
         return ""
