@@ -29,8 +29,6 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not isinstance(str1, str) or not isinstance(str2, str):
         raise TypeError("Inputs must be strings")
     
-    # Remove any automatic case-folding
-    # Use separate case-sensitive comparison
     # Handle empty string cases
     if not str1 or not str2:
         return ""
@@ -42,12 +40,17 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     # Build the dp table
     for i in range(1, m + 1):
         for j in range(1, n + 1):
+            # Strictly case-sensitive comparison
             if str1[i-1] == str2[j-1]:
                 # If characters match, add 1 to previous diagonal value
                 dp[i][j] = dp[i-1][j-1] + 1
             else:
                 # Take the maximum of left and top values
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    
+    # Check if there's actually a common subsequence
+    if dp[m][n] == 0:
+        return ""
     
     # Reconstruct the LCS
     lcs = []
