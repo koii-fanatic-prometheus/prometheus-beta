@@ -8,7 +8,7 @@ def longest_common_substring(str1, str2):
 
     Returns:
         str: The longest common substring. If no common substring exists, 
-             returns an empty string.
+             returns an empty string. Matching is case-sensitive.
 
     Raises:
         TypeError: If inputs are not strings
@@ -21,36 +21,20 @@ def longest_common_substring(str1, str2):
     if not str1 or not str2:
         return ""
 
-    # Dynamic programming approach to find longest common substring
-    # Create a matrix to store lengths of common substrings
-    m, n = len(str1), len(str2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    
-    # Variables to track the maximum length and ending position
-    max_length = 0
-    end_position = 0
+    # Find all common substrings
+    common_substrings = []
+    for i in range(len(str1)):
+        for j in range(len(str2)):
+            # Check substring starting at these positions
+            k = 0
+            while (i + k < len(str1) and 
+                   j + k < len(str2) and 
+                   str1[i + k] == str2[j + k]):
+                k += 1
+            
+            # If a substring was found, add it
+            if k > 0:
+                common_substrings.append(str1[i:i+k])
 
-    # Fill the dynamic programming table
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            # Case-sensitive exact match
-            if str1[i-1] == str2[j-1]:
-                dp[i][j] = dp[i-1][j-1] + 1
-                
-                # Update max length and ending position if needed
-                if dp[i][j] > max_length:
-                    max_length = dp[i][j]
-                    end_position = i - 1
-    
-    # Extract and return the longest common substring
-    if max_length == 0:
-        # No common substring found
-        return ""
-    
-    substring = str1[end_position - max_length + 1:end_position + 1]
-    
-    # Ensure the substring is long enough and actually appears in both strings
-    if len(substring) > 1 and substring in str1 and substring in str2:
-        return substring
-    
-    return ""
+    # Return the longest common substring, or empty string if none found
+    return max(common_substrings, key=len, default="")
