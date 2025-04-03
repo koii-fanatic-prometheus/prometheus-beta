@@ -3,8 +3,11 @@ from src.longest_common_substring import longest_common_substring
 
 def test_basic_common_substring():
     """Test finding a basic common substring"""
-    assert longest_common_substring("programming", "program") == "program"
-    assert longest_common_substring("awesome", "some") == "some"
+    result = longest_common_substring("programming", "program")
+    assert result == "program"
+    
+    result = longest_common_substring("hello", "world")
+    assert result == ""
 
 def test_identical_strings():
     """Test when strings are identical"""
@@ -13,6 +16,7 @@ def test_identical_strings():
 def test_partial_common_substring():
     """Test finding partial common substrings"""
     assert longest_common_substring("abcdef", "bcdfgh") == "bcd"
+    assert longest_common_substring("awesome", "some") == "some"
 
 def test_empty_strings():
     """Test handling of empty strings"""
@@ -40,4 +44,5 @@ def test_no_common_substring():
 
 def test_multiple_common_substrings():
     """Test finding the longest when multiple common substrings exist"""
-    assert longest_common_substring("abcabcabc", "bcabca") == "bcabc"
+    result = longest_common_substring("abcabcabc", "bcabca")
+    assert result == "bcabc"  # Verify it's the specific substring we want
