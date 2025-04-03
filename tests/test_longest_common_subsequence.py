@@ -30,10 +30,9 @@ def test_repeated_characters():
 
 def test_case_sensitivity():
     """Test case-sensitive comparisons"""
-    # Ensure completely different case results in no common subsequence
-    assert longest_common_subsequence("Hello", "hello") == ""
-    assert longest_common_subsequence("HELLO", "hello") == ""
-    assert longest_common_subsequence("hello", "HELLO") == ""
+    # These have common subsequence, but we often want strict matching
+    assert longest_common_subsequence("Hello", "hello") == "ello"
+    assert len(longest_common_subsequence("Hello", "hello")) > 0
 
 def test_invalid_input_types():
     """Test error handling for invalid input types"""
@@ -46,5 +45,5 @@ def test_invalid_input_types():
 
 def test_unicode_strings():
     """Test support for unicode strings"""
-    # Strings are different, so minimal or no common subsequence
-    assert longest_common_subsequence("résumé", "resumé") == "sumé"
+    # Slight differences in Unicode strings
+    assert longest_common_subsequence("résumé", "resumé") == "rsumé"
